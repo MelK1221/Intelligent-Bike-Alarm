@@ -54,3 +54,4 @@ dkms.conf
 # Additional
 *.vscode/
 .DS_Store
+*hardware_test/
