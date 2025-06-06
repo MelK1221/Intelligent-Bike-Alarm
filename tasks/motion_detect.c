@@ -8,19 +8,25 @@
 
 #define THRESHOLD 1.5f
 #define ACCEL_SCALE 4096.0f
+#define STATIONARY_G 1.0f
 
 void detect_motion(void) {
     static bool motion_reported = false;
+    accel_data_t offset = get_calibration_offset();
 
-    float accel_x = read_accel_axis(REG_ACCEL_X_MEASURE_1, ACCEL_SCALE, mpu6050_read_reg);
-    float accel_y = read_accel_axis(REG_ACCEL_Y_MEASURE_1, ACCEL_SCALE, mpu6050_read_reg);
-    float accel_z = read_accel_axis(REG_ACCEL_Z_MEASURE_1, ACCEL_SCALE, mpu6050_read_reg);
+accel_data_t raw_accel_data = mpu6050_read_real_accel();
 
-    float tot_accel = sqrt(accel_x * accel_x + accel_y * accel_y + accel_z * accel_z);
+accel_data_t corrected = {
+    .x = raw_accel_data.x - offset.x,
+    .y = raw_accel_data.y - offset.y,
+    .z = raw_accel_data.z - offset.z
+};
 
-    if (fabsf(tot_accel - 1.0f) > THRESHOLD) {
+    float tot_accel = sqrt(corrected.x * corrected.x + corrected.y * corrected.y + corrected.z * corrected.z);
+
+    if (fabsf(tot_accel - STATIONARY_G) > THRESHOLD) {
         if (!motion_reported) {
-            printf("Motion detected: ax=%.2f ay=%.2f az=%.2f total=%.2f\r\n", accel_x, accel_y, accel_z, tot_accel);
+            printf("Motion detected: ax=%.2f ay=%.2f az=%.2f total=%.2f\r\n", corrected.x, corrected.y, corrected.z, tot_accel);
             printf("At clock count: %lu\r\n", rtos_clock_count);
             motion_reported = true;
         }

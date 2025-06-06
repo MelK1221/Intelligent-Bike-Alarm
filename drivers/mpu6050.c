@@ -14,6 +14,7 @@
 #include <stdio.h>
 
 
+
 uint16_t init_mpu6050(MPU6050_REG_WRITE_TYPE writeReg, DELAY_MS_TYPE delay)
 {
     printf("MPU6050: Resetting power management...\n");
@@ -24,25 +25,25 @@ uint16_t init_mpu6050(MPU6050_REG_WRITE_TYPE writeReg, DELAY_MS_TYPE delay)
     delay_ms_rtos(100);
 
     printf("MPU6050: Resetting signal paths...\n");
-    if (!writeReg(REG_USER_CTRL, I2C_MST_RESET | SIG_COND_RESET)) {
+    if (writeReg(REG_USER_CTRL, I2C_MST_RESET | SIG_COND_RESET) != 0) {
         printf("ERROR: Failed to write REG_USER_CTRL\n");
         return 2;
     }
-    delay(100);
+    delay_ms_rtos(100);
 
     printf("MPU6050: Setting clock source...\n");
-    if (!writeReg(REG_PWR_MGMT_1, PWR_MGMT_CLK_SEL_INTERNAL)) {
+    if (writeReg(REG_PWR_MGMT_1, PWR_MGMT_CLK_SEL_INTERNAL) != 0) {
         printf("ERROR: Failed to set clock source\n");
         return 3;
     }
 
     printf("MPU6050: Awakening sensors...\n");
-    if (!writeReg(REG_PWR_MGMT_2, 0x00)) {
+    if (writeReg(REG_PWR_MGMT_2, 0x00) != 0) {
         printf("ERROR: Failed to write REG_PWR_MGMT_2\n");
         return 4;
     }
 
-    delay(1000);
+    delay_ms_rtos(1000);
     printf("MPU6050: Initialization complete.\n");
 
     return 0;

@@ -5,8 +5,16 @@
 #include "rtos.h"
 #include <avr/sleep.h>
 #include <stdio.h>
+#include <stddef.h>
+#include <string.h> 
+#include <stdint.h>
 
 #define MPU6050_ADDR 0x68  // default I2C address for MPU6050
+#define ACCEL_SCALE 4096.0f
+
+// Calibration offsets (initialized to 0)
+static accel_data_t calibration_offset = {0};
+
 
 int mpu6050_read_reg(uint8_t reg, uint8_t *data) {
     uint8_t reg_addr = (uint8_t)reg;
@@ -55,4 +63,61 @@ void delay_ms(uint32_t ms) {
         //sleep_cpu();
         //printf("Hello!");
     }
+}
+
+// Helper to read a 16-bit signed value from two registers
+static int16_t mpu6050_read_16bit(uint8_t reg_high, uint8_t reg_low) {
+    uint8_t high_byte, low_byte;
+    if (mpu6050_read_reg(reg_high, &high_byte) != 0) {
+        return 0; // or handle error as you prefer
+    }
+    if (mpu6050_read_reg(reg_low, &low_byte) != 0) {
+        return 0; // or handle error
+    }
+    return (int16_t)((high_byte << 8) | low_byte);
+}
+
+// Reads accelerometer data and converts to g's
+accel_data_t mpu6050_read_real_accel(void) {
+    accel_data_t accel;
+
+    const uint8_t REG_ACCEL_XOUT_H = 0x3B;
+    const uint8_t REG_ACCEL_XOUT_L = 0x3C;
+    const uint8_t REG_ACCEL_YOUT_H = 0x3D;
+    const uint8_t REG_ACCEL_YOUT_L = 0x3E;
+    const uint8_t REG_ACCEL_ZOUT_H = 0x3F;
+    const uint8_t REG_ACCEL_ZOUT_L = 0x40;
+
+    int16_t raw_x = mpu6050_read_16bit(REG_ACCEL_XOUT_H, REG_ACCEL_XOUT_L);
+    int16_t raw_y = mpu6050_read_16bit(REG_ACCEL_YOUT_H, REG_ACCEL_YOUT_L);
+    int16_t raw_z = mpu6050_read_16bit(REG_ACCEL_ZOUT_H, REG_ACCEL_ZOUT_L);
+
+    accel.x = (float)raw_x / ACCEL_SCALE;
+    accel.y = (float)raw_y / ACCEL_SCALE;
+    accel.z = (float)raw_z / ACCEL_SCALE;
+
+    return accel;
+}
+
+void calibrate_mpu6050(uint16_t sample_count) {
+    accel_data_t sum = {0};
+    for (uint16_t i = 0; i < sample_count; i++) {
+        accel_data_t data = mpu6050_read_real_accel();
+        sum.x += data.x;
+        sum.y += data.y;
+        sum.z += data.z;
+        delay_ms_rtos(5); // Small delay between samples
+    }
+
+    calibration_offset.x = sum.x / sample_count;
+    calibration_offset.y = sum.y / sample_count;
+    calibration_offset.z = (sum.z / sample_count) - 1.0f;  // Remove gravity
+
+    // Optional: print for debugging
+    printf("Calibration complete: Offset X: %.3f, Y: %.3f, Z: %.3f\n",
+           calibration_offset.x, calibration_offset.y, calibration_offset.z);
+}
+
+accel_data_t get_calibration_offset(void) {
+    return calibration_offset;
 }

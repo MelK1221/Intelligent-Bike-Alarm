@@ -11,7 +11,7 @@
 void calibrate_motion(void) {
     static uint16_t count = 0;
 
-    if (count++ >= 100) {
+    if (count++ >= 10) {
         float accel_x = read_accel_axis(REG_ACCEL_X_MEASURE_1, ACCEL_SCALE, mpu6050_read_reg);
         float accel_y = read_accel_axis(REG_ACCEL_Y_MEASURE_1, ACCEL_SCALE, mpu6050_read_reg);
         float accel_z = read_accel_axis(REG_ACCEL_Z_MEASURE_1, ACCEL_SCALE, mpu6050_read_reg);
