@@ -11,9 +11,11 @@
 
 #define MPU6050_ADDR 0x68  // default I2C address for MPU6050
 #define ACCEL_SCALE 4096.0f
+#define CALIBRATION_SAMPLES 1000
 
 // Calibration offsets (initialized to 0)
 static accel_data_t calibration_offset = {0};
+static gyro_data_t gyro_offset = {0};
 
 
 int mpu6050_read_reg(uint8_t reg, uint8_t *data) {
@@ -120,4 +122,56 @@ void calibrate_mpu6050(uint16_t sample_count) {
 
 accel_data_t get_calibration_offset(void) {
     return calibration_offset;
+}
+
+gyro_data_t mpu6050_read_gyro(void) {
+    uint8_t raw_data[6];
+    gyro_data_t gyro = {0};
+
+    for (int i = 0; i < 6; ++i) {
+        if (mpu6050_read_reg(0x43 + i, &raw_data[i]) != 0) {
+            // Handle error if needed
+        }
+    }
+
+    int16_t raw_x = (int16_t)((raw_data[0] << 8) | raw_data[1]);
+    int16_t raw_y = (int16_t)((raw_data[2] << 8) | raw_data[3]);
+    int16_t raw_z = (int16_t)((raw_data[4] << 8) | raw_data[5]);
+
+    const float gyro_scale = 131.0f;  // Assuming FS_SEL=0 ±250 °/s
+    gyro.x = (float)raw_x / gyro_scale;
+    gyro.y = (float)raw_y / gyro_scale;
+    gyro.z = (float)raw_z / gyro_scale;
+
+    return gyro;
+}
+
+void set_gyro_calibration(gyro_data_t offset) {
+    gyro_offset = offset;
+}
+
+gyro_data_t get_gyro_calibration(void) {
+    return gyro_offset;
+}
+
+void calibrate_gyro(void) {
+    int32_t sum_x = 0, sum_y = 0, sum_z = 0;
+
+    for (int i = 0; i < CALIBRATION_SAMPLES; i++) {
+        gyro_data_t sample = mpu6050_read_gyro();
+        sum_x += (int32_t)(sample.x * 1000);  // scale up to avoid float sum errors
+        sum_y += (int32_t)(sample.y * 1000);
+        sum_z += (int32_t)(sample.z * 1000);
+
+        // small delay between samples if needed
+        delay_ms_rtos(1);
+    }
+
+    gyro_data_t offset = {
+        .x = sum_x / (float)CALIBRATION_SAMPLES / 1000.0f,
+        .y = sum_y / (float)CALIBRATION_SAMPLES / 1000.0f,
+        .z = sum_z / (float)CALIBRATION_SAMPLES / 1000.0f
+    };
+
+    set_gyro_calibration(offset);
 }

@@ -55,6 +55,7 @@ int main(void) {
         while (1);  // Stop if init fails
     }
     calibrate_mpu6050(200);
+    calibrate_gyro();
 
     rtos_add_task(detect_motion, 5, 0);
     rtos_add_task(task_blink, 1, 0);
