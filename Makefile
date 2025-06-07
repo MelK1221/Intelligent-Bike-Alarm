@@ -7,7 +7,7 @@ BAUD = 115200
 
 # === FILES ===
 TARGET = bike_alarm
-SRC = main.c rtos.c controller_state.c tasks/motion_detect.c tasks/bt_alert.c tasks/activate_buzzer.c drivers/uart.c drivers/mpu6050.c drivers/mpu6050_helper.c drivers/twi_master.c drivers/buzzer.c
+SRC = main.c rtos.c controller_state.c tasks/motion_detect.c tasks/bt_alert.c tasks/activate_buzzer.c tasks/rfid.c drivers/uart.c drivers/mpu6050.c drivers/mpu6050_helper.c drivers/twi_master.c drivers/buzzer.c drivers/mfrc522.c
 OBJ = $(SRC:.c=.o)
 
 # === TOOLS ===

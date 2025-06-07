@@ -38,7 +38,7 @@ gyro_data_t corrected_g = {
                        (fabsf(corrected_g.y) > GYRO_THRESHOLD) ||
                        (fabsf(corrected_g.z) > GYRO_THRESHOLD);
 
-    if (accel_motion || gyro_motion) {
+    if (is_system_armed() && (accel_motion || gyro_motion)) {
         if (!motion_reported) {
             printf("Motion detected:\n");
             printf("  Accel: ax=%.2f ay=%.2f az=%.2f total=%.2f\n", corrected.x, corrected.y, corrected.z, tot_accel);

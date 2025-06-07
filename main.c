@@ -26,7 +26,7 @@ void task_blink(void) {
 extern void detect_motion(void);
 extern void send_bt_alert(void);
 extern void buzzer_alert(void);
-
+extern void check_rfid(void);
 
 void timer1_init_10ms(void) {
     TCCR1A = 0;
@@ -63,9 +63,10 @@ int main(void) {
     calibrate_gyro();
 
     rtos_add_task(detect_motion, 5, 0);
-    rtos_add_task(task_blink, 1, 0);
+    // rtos_add_task(task_blink, 1, 0);
     rtos_add_task(send_bt_alert, 100, 0);
     rtos_add_task(buzzer_alert, 5, 2);
+    rtos_add_task(check_rfid, 100, 200);
 
     while (1) {
         rtos_scheduler();
