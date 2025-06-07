@@ -44,8 +44,10 @@ gyro_data_t corrected_g = {
             printf("  Accel: ax=%.2f ay=%.2f az=%.2f total=%.2f\n", corrected.x, corrected.y, corrected.z, tot_accel);
             printf("  Gyro: gx=%.2f gy=%.2f gz=%.2f\n", corrected_g.x, corrected_g.y, corrected_g.z);
             motion_reported = true;
+            move_detected = true;
         }
     } else {
         motion_reported = false;
+        move_detected = false;
     }
 }

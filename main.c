@@ -5,6 +5,7 @@
 #include "uart.h"
 #include "mpu6050.h"
 #include "mpu6050_helper.h"
+#include "buzzer.h"
 
 // RTOS task: Blink LED at PB5 roughly every second
 void task_blink(void) {
@@ -23,6 +24,9 @@ void task_blink(void) {
 }
 
 extern void detect_motion(void);
+extern void send_bt_alert(void);
+extern void buzzer_alert(void);
+
 
 void timer1_init_10ms(void) {
     TCCR1A = 0;
@@ -46,7 +50,8 @@ int main(void) {
     timer1_init_10ms();
     sei();
 
-    uart_init(115200);
+    uart_init(9600);
+    buzz_init();
 
     rtos_init();
 
@@ -59,6 +64,8 @@ int main(void) {
 
     rtos_add_task(detect_motion, 5, 0);
     rtos_add_task(task_blink, 1, 0);
+    rtos_add_task(send_bt_alert, 100, 0);
+    rtos_add_task(buzzer_alert, 5, 2);
 
     while (1) {
         rtos_scheduler();
