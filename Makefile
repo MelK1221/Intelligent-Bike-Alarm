@@ -1,33 +1,46 @@
-# Compiler and flags
-CC=avr-gcc
-OBJCOPY=avr-objcopy
-CFLAGS=-mmcu=atmega328p -Os -Wall
+# === CONFIGURATION ===
+MCU = atmega328p
+F_CPU = 16000000UL
+PROGRAMMER = arduino
+PORT = /dev/tty.usbmodem1101  # ← update this for your machine
+BAUD = 115200
 
-# Source object files
-OBJ=main.o rtos/rtos.o tasks/task_motion.o tasks/task_rfid.o tasks/task_buzzer.o tasks/task_alert_bt.o \
-    drivers/mpu6050.o drivers/mfrc522.o drivers/buzzer.o drivers/bluetooth.o utils/timer.o
+# === FILES ===
+TARGET = bike_alarm
+SRC = main.c rtos.c controller_state.c tasks/motion_detect.c tasks/bt_alert.c tasks/activate_buzzer.c tasks/rfid.c drivers/uart.c drivers/mpu6050.c drivers/mpu6050_helper.c drivers/twi_master.c drivers/buzzer.c drivers/mfrc522.c
+OBJ = $(SRC:.c=.o)
 
-# Targets
-TARGET=SmartBikeAlarm
-MCU=atmega328p
-PORT=/dev/cu.usbmodem1101
-BAUD=115200
+# === TOOLS ===
+CC = avr-gcc
+OBJCOPY = avr-objcopy
+AVRDUDE = avrdude
 
-# Default target
+# === FLAGS ===
+CFLAGS = -mmcu=$(MCU) -DF_CPU=$(F_CPU) -Os -Wall \
+         -I. -Itasks -Idrivers
+LDFLAGS = -mmcu=$(MCU) -Wl,-u,vfprintf -lprintf_flt -lm
+
+# === DEFAULT TARGET ===
 all: $(TARGET).hex
 
-# Compile and link
+# Compile .c to .o
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Link object files to ELF
 $(TARGET).elf: $(OBJ)
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(LDFLAGS) $^ -o $@
 
 # Convert ELF to HEX
 $(TARGET).hex: $(TARGET).elf
 	$(OBJCOPY) -O ihex -R .eeprom $< $@
 
-# Upload using avrdude
+# Upload to Arduino
 upload: $(TARGET).hex
-	avrdude -c arduino -p $(MCU) -P $(PORT) -b $(BAUD) -D -U flash:w:$(TARGET).hex:i
+	$(AVRDUDE) -c $(PROGRAMMER) -p $(MCU) -P $(PORT) -b $(BAUD) -U flash:w:$(TARGET).hex:i
 
-# Clean build files
+# Clean up build files
 clean:
-	rm -f *.o */*.o *.elf *.hex
+	rm -f *.o tasks/*.o drivers/*.o *.elf *.hex
+
+.PHONY: all clean upload
