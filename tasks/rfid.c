@@ -1,4 +1,6 @@
 #include "mfrc522.h"
+#include "mfrc522_header.h"
+#include "buzzer.h"
 #include "controller_state.h"
 #include "uart.h"
 #include "rtos.h"
@@ -9,22 +11,27 @@
 MFRC522 rfid;
 
 void check_rfid(void) {
-    static bool initialized = false;
-    //static MFRC522_Uid last_uid;
+    static uint32_t last_scan_time = 0;
 
-    if (!initialized) {
-        MFRC522_Init(&rfid, RFID_CS_PIN, RFID_RST_PIN);
-        initialized = true;
+    if (rtos_get_clock_count() - last_scan_time < 1000) {
+        return;  // debounce
     }
 
-    if (MFRC522_PICC_IsNewCardPresent(&rfid)) {
-        MFRC522_Uid uid;
-        if (MFRC522_PICC_ReadCardSerial(&rfid, &uid)) {
-            // Optional: compare UID to authorized UID(s) here
-            toggle_system_armed();
+    if (mfrc522_tag_present()) {
+        rfid_tag_t tag = mfrc522_get_tag();
 
-            printf("RFID tag scanned. System is now %s.\r\n", is_system_armed() ? "ARMED" : "DISARMED");
-            delay_ms_rtos(1000); // debounce delay
+        if (is_authorized_tag(&tag)) {
+            toggle_system_armed();
+            triggered = false;
+            move_detected = false;
+
+            if (system_armed()) {
+                buzz_tone_seq(BUZZER_ARMED);  // Armed sound
+            } else {
+                buzz_tone_seq(BUZZER_DISARMED);  // Disarmed sound
+            }
+
+            last_scan_time = rtos_get_clock_count();
         }
     }
 }

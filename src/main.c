@@ -2,7 +2,7 @@
 #include <avr/interrupt.h>
 
 #include "buzzer.h"
-#include "mpu6050.h"
+#include "mfrc522_helper.h"
 #include "mpu6050_helper.h"
 #include "timer.h"
 #include "uart.h"
@@ -22,17 +22,12 @@ int main(void) {
     init_timer1();
     sei();
 
+    rtos_init();
+
     init_uart(9600);
     init_buzzer();
     init_rfid();
-    rtos_init();
-
-    if (init_mpu6050(mpu6050_write_reg, rtos_delay_ms) != 0) {
-        printf("MPU6050 initialization failed.\r\n");
-        while (1);  // Stop if init fails
-    }
-    calibrate_mpu6050(200);
-    calibrate_gyro();
+    init_mpu6050_w_cal()
 
     rtos_add_task(detect_motion, 5, 0);
     rtos_add_task(send_bt_alert, 100, 0);

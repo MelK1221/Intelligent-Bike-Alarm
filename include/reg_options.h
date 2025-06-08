@@ -97,21 +97,21 @@ extern "C" {
 
 
 //self test registers
-#define REG_SELF_TEST_X (0x0D)
-#define XG_TEST_MASK (0x1F)
-#define XA_TEST_UPPER_MASK (0xE0)
-#define REG_SELF_TEST_Y (0x0E)
-#define YG_TEST_MASK (0x1F)
-#define YA_TEST_UPPER_MASK (0xE0)
-#define REG_SELF_TEST_Z (0x0F)
-#define ZG_TEST_MASK (0x1F)
-#define ZA_TEST_UPPER_MASK (0xE0)
+// #define REG_SELF_TEST_X (0x0D)
+// #define XG_TEST_MASK (0x1F)
+// #define XA_TEST_UPPER_MASK (0xE0)
+// #define REG_SELF_TEST_Y (0x0E)
+// #define YG_TEST_MASK (0x1F)
+// #define YA_TEST_UPPER_MASK (0xE0)
+// #define REG_SELF_TEST_Z (0x0F)
+// #define ZG_TEST_MASK (0x1F)
+// #define ZA_TEST_UPPER_MASK (0xE0)
 
 //accelerometer less significant portion of self test
-#define REG_SELF_TEST_A (0x10) 
-#define XA_TEST_LOWER_MASK (0x30)
-#define YA_TEST_LOWER_MASK (0x0C)
-#define ZA_TEST_LOWER_MASK (0x03)
+// #define REG_SELF_TEST_A (0x10) 
+// #define XA_TEST_LOWER_MASK (0x30)
+// #define YA_TEST_LOWER_MASK (0x0C)
+// #define ZA_TEST_LOWER_MASK (0x03)
 
 //Accelerometer config and self test activation register
 #define REG_ACCEL_CONFIG (0x1C)

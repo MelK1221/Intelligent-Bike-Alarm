@@ -7,29 +7,20 @@ typedef struct {
     float x;
     float y;
     float z;
-} accel_data_t;
+} 3d_data_t;
 
-typedef struct {
-    float x;
-    float y;
-    float z;
-} gyro_data_t;
+typedef 3d_data_t accel_data_t;
+typedef 3d_data_t gyro_data_t;
 
 int mpu6050_read_reg(uint8_t reg, uint8_t *data);
 int mpu6050_write_reg(uint8_t reg, uint8_t data);
 int mpu6050_read_burst(uint16_t reg, uint8_t *data, uint16_t len);
-void delay_ms(uint32_t ms);
-void mpu6050_read_raw(int16_t *ax, int16_t *ay, int16_t *az);
-accel_data_t mpu6050_read_real_accel(void);
-void calibrate_mpu6050(uint16_t sample_count);
-accel_data_t get_calibration_offset(void);
+accel_data_t mpu6050_read_accel(void);
 gyro_data_t mpu6050_read_gyro(void);
-void set_gyro_calibration(gyro_data_t offset);
+void calibrate_accelerometer(uint16_t sample_count);
+void calibrate_gyro(uint16_t sample_count);
+accel_data_t get_accel_calibration(void);
 gyro_data_t get_gyro_calibration(void);
-void calibrate_gyro(void);
-
-extern float accel_x_offset;
-extern float accel_y_offset;
-extern float accel_z_offset;
+int init_mpu6050_w_cal(void);
 
 #endif

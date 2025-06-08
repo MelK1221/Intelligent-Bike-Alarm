@@ -6,48 +6,68 @@
 #include "uart.h"
 #include "rtos.h"
 
-#define THRESHOLD 1.5f
+#define ACCEL_THRESHOLD 1.5f
 #define GYRO_THRESHOLD 5.0f 
 #define ACCEL_SCALE 4096.0f
 #define STATIONARY_G 1.0f
 
 void detect_motion(void) {
-    static bool motion_reported = false;
-    accel_data_t offset = get_calibration_offset();
+    static bool initial_motion_detected = false;
+    static uint32_t motion_start_time = 0;
+
+    if (!is_alarm_armed()) {
+        set_motion_detected(false);
+        initial_motion_detected = false;
+        return;
+    }
+
+    accel_data_t offset = get_accel_calibration();
     gyro_data_t gyro_offset = get_gyro_calibration();
 
-accel_data_t raw_accel_data = mpu6050_read_real_accel();
-gyro_data_t raw_gyro_data = mpu6050_read_gyro();
+    accel_data_t raw_accel_data = mpu6050_read_accel();
+    gyro_data_t raw_gyro_data = mpu6050_read_gyro();
 
-accel_data_t corrected = {
-    .x = raw_accel_data.x - offset.x,
-    .y = raw_accel_data.y - offset.y,
-    .z = raw_accel_data.z - offset.z
-};
+    accel_data_t corrected_a = {
+        .x = raw_accel_data.x - offset.x,
+        .y = raw_accel_data.y - offset.y,
+        .z = raw_accel_data.z - offset.z
+    };
 
-gyro_data_t corrected_g = {
-    .x = raw_gyro_data.x - gyro_offset.x,
-    .y = raw_gyro_data.y - gyro_offset.y,
-    .z = raw_gyro_data.z - gyro_offset.z
-};
+    gyro_data_t corrected_g = {
+        .x = raw_gyro_data.x - gyro_offset.x,
+        .y = raw_gyro_data.y - gyro_offset.y,
+        .z = raw_gyro_data.z - gyro_offset.z
+    };
 
-    float tot_accel = sqrt(corrected.x * corrected.x + corrected.y * corrected.y + corrected.z * corrected.z);
+    float total_accel = sqrtf(corrected_a.x * corrected_a.x +
+                              corrected_a.y * corrected_a.y +
+                              corrected_a.z * corrected_a.z);
 
-    bool accel_motion = fabsf(tot_accel - 1.0f) > THRESHOLD;
-    bool gyro_motion = (fabsf(corrected_g.x) > GYRO_THRESHOLD) ||
-                       (fabsf(corrected_g.y) > GYRO_THRESHOLD) ||
-                       (fabsf(corrected_g.z) > GYRO_THRESHOLD);
+    bool accel_motion = fabsf(total_accel - STATIONARY_G) > ACCEL_THRESHOLD;
+    bool gyro_motion = fabsf(corrected_g.x) > GYRO_THRESHOLD ||
+                       fabsf(corrected_g.y) > GYRO_THRESHOLD ||
+                       fabsf(corrected_g.z) > GYRO_THRESHOLD;
 
-    if (is_system_armed() && (accel_motion || gyro_motion)) {
-        if (!motion_reported) {
-            printf("Motion detected:\n");
-            printf("  Accel: ax=%.2f ay=%.2f az=%.2f total=%.2f\n", corrected.x, corrected.y, corrected.z, tot_accel);
-            printf("  Gyro: gx=%.2f gy=%.2f gz=%.2f\n", corrected_g.x, corrected_g.y, corrected_g.z);
-            motion_reported = true;
-            move_detected = true;
+    bool motion_detected_now = accel_motion || gyro_motion;
+
+    if (motion_detected_now) {
+        if (!initial_motion_detected) {
+            motion_start_time = rtos_clock_count;
+            initial_motion_detected = true;
+            printf("Motion detected.");
+        } else {
+            // Check if 3 seconds have passed
+            if ((rtos_clock_count - motion_start_time) >= 3000) {
+                if (!is_alarm_triggered()) {
+                    set_alarm_triggered(true);
+                    printf("Alarm TRIGGERED by motion!");
+                }
+                set_motion_detected(true);
+                initial_motion_detected = false;  // lock out re-trigger
+            }
         }
     } else {
-        motion_reported = false;
-        move_detected = false;
+        initial_motion_detected = false;
+        set_motion_detected(false);
     }
 }

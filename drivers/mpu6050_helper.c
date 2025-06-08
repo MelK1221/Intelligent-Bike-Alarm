@@ -1,20 +1,28 @@
 #include "mpu6050_helper.h"
+
 #include <stdio.h>
 #include <stddef.h>
 #include <string.h> 
 #include <stdint.h>
-#include <avr/sleep.h>
+
 #include "mpu6050.h"
+#include "sleep.h"
 #include "reg_options.h"
 #include "twi_master.h"
+#include "controller_state_h"
 #include "rtos.h"
 
 #define MPU6050_ADDR 0x68  // default I2C address for MPU6050
 #define ACCEL_SCALE 4096.0f
-#define CALIBRATION_SAMPLES 1000
+#define GYRO_SCALE 131.0f
+#define CALIBRATION_DELAY_MS 5
+#define ACCEL_START_REG 0x3B;
+#define GYRO_START_REG 0x43;
+#define MPU6050_BURST_LEN 6
+
 
 // Calibration offsets (initialized to 0)
-static accel_data_t calibration_offset = {0};
+static accel_data_t accel_offset = {0};
 static gyro_data_t gyro_offset = {0};
 
 
@@ -48,51 +56,19 @@ int mpu6050_read_burst(uint16_t reg, uint8_t *data, uint16_t len) {
     return 0;
 }
 
-void mpu6050_read_raw(int16_t *ax, int16_t *ay, int16_t *az)
-{
-    *ax = read_raw_axis(REG_ACCEL_X_MEASURE_1, mpu6050_read_reg);
-    *ay = read_raw_axis(REG_ACCEL_Y_MEASURE_1, mpu6050_read_reg);
-    *az = read_raw_axis(REG_ACCEL_Z_MEASURE_1, mpu6050_read_reg);
-}
+accel_data_t mpu6050_read_accel(void) {
+    uint8_t raw_data[6];
+    accel_data_t accel = {0};
 
-void delay_ms(uint32_t ms) {
-    uint32_t start_tick = rtos_clock_count;
-    // Assuming rtos_clock_count increments every 10 ms
-    uint32_t wait_ticks = ms / 10;
-    if (wait_ticks == 0) wait_ticks = 1;  // Minimum 1 tick wait
-
-    while ((rtos_clock_count - start_tick) < wait_ticks) {
-        //sleep_cpu();
-        //printf("Hello!");
+    // Read 6 bytes from ACCEL_XOUT_H to ACCEL_ZOUT_L
+    if (mpu6050_read_burst(ACCEL_START_REG, raw_data, MPU6050_BURST_LEN) != 0) {
+        printf("Error reading accelerometer data\n");
+        return accel;
     }
-}
 
-// Helper to read a 16-bit signed value from two registers
-static int16_t mpu6050_read_16bit(uint8_t reg_high, uint8_t reg_low) {
-    uint8_t high_byte, low_byte;
-    if (mpu6050_read_reg(reg_high, &high_byte) != 0) {
-        return 0; // or handle error as you prefer
-    }
-    if (mpu6050_read_reg(reg_low, &low_byte) != 0) {
-        return 0; // or handle error
-    }
-    return (int16_t)((high_byte << 8) | low_byte);
-}
-
-// Reads accelerometer data and converts to g's
-accel_data_t mpu6050_read_real_accel(void) {
-    accel_data_t accel;
-
-    const uint8_t REG_ACCEL_XOUT_H = 0x3B;
-    const uint8_t REG_ACCEL_XOUT_L = 0x3C;
-    const uint8_t REG_ACCEL_YOUT_H = 0x3D;
-    const uint8_t REG_ACCEL_YOUT_L = 0x3E;
-    const uint8_t REG_ACCEL_ZOUT_H = 0x3F;
-    const uint8_t REG_ACCEL_ZOUT_L = 0x40;
-
-    int16_t raw_x = mpu6050_read_16bit(REG_ACCEL_XOUT_H, REG_ACCEL_XOUT_L);
-    int16_t raw_y = mpu6050_read_16bit(REG_ACCEL_YOUT_H, REG_ACCEL_YOUT_L);
-    int16_t raw_z = mpu6050_read_16bit(REG_ACCEL_ZOUT_H, REG_ACCEL_ZOUT_L);
+    int16_t raw_x = (int16_t)((raw_data[0] << 8) | raw_data[1]);
+    int16_t raw_y = (int16_t)((raw_data[2] << 8) | raw_data[3]);
+    int16_t raw_z = (int16_t)((raw_data[4] << 8) | raw_data[5]);
 
     accel.x = (float)raw_x / ACCEL_SCALE;
     accel.y = (float)raw_y / ACCEL_SCALE;
@@ -101,77 +77,129 @@ accel_data_t mpu6050_read_real_accel(void) {
     return accel;
 }
 
-void calibrate_mpu6050(uint16_t sample_count) {
-    accel_data_t sum = {0};
-    for (uint16_t i = 0; i < sample_count; i++) {
-        accel_data_t data = mpu6050_read_real_accel();
-        sum.x += data.x;
-        sum.y += data.y;
-        sum.z += data.z;
-        delay_ms_rtos(5); // Small delay between samples
-    }
-
-    calibration_offset.x = sum.x / sample_count;
-    calibration_offset.y = sum.y / sample_count;
-    calibration_offset.z = (sum.z / sample_count) - 1.0f;  // Remove gravity
-
-    // Optional: print for debugging
-    printf("Calibration complete: Offset X: %.3f, Y: %.3f, Z: %.3f\n",
-           calibration_offset.x, calibration_offset.y, calibration_offset.z);
-}
-
-accel_data_t get_calibration_offset(void) {
-    return calibration_offset;
-}
-
 gyro_data_t mpu6050_read_gyro(void) {
     uint8_t raw_data[6];
     gyro_data_t gyro = {0};
 
-    for (int i = 0; i < 6; ++i) {
-        if (mpu6050_read_reg(0x43 + i, &raw_data[i]) != 0) {
-            // Handle error if needed
-        }
+    // Read 6 bytes from GYRO_XOUT_H to GYRO_ZOUT_L
+    if (mpu6050_read_burst(GYRO_START_REG, raw_data, MPU6050_BURST_LEN) != 0) {
+        printf("Error reading gyroscope data\n");
+        return gyro;
     }
 
     int16_t raw_x = (int16_t)((raw_data[0] << 8) | raw_data[1]);
     int16_t raw_y = (int16_t)((raw_data[2] << 8) | raw_data[3]);
     int16_t raw_z = (int16_t)((raw_data[4] << 8) | raw_data[5]);
 
-    const float gyro_scale = 131.0f;  // Assuming FS_SEL=0 ±250 °/s
-    gyro.x = (float)raw_x / gyro_scale;
-    gyro.y = (float)raw_y / gyro_scale;
-    gyro.z = (float)raw_z / gyro_scale;
+    gyro.x = (float)raw_x / GYRO_SCALE;
+    gyro.y = (float)raw_y / GYRO_SCALE;
+    gyro.z = (float)raw_z / GYRO_SCALE;
 
     return gyro;
 }
 
-void set_gyro_calibration(gyro_data_t offset) {
-    gyro_offset = offset;
+void calibrate_accelerometer(uint16_t sample_count) {
+    accel_data_t sum = {0};
+    for (uint16_t i = 0; i < sample_count; i++) {
+        accel_data_t sample = mpu6050_read_accel();
+        sum.x += sample.x;
+        sum.y += sample.y;
+        sum.z += sample.z;
+        delay_ms_rtos(CALIBRATION_DELAY_MS);
+    }
+
+    accel_offset.x = sum.x / sample_count;
+    accel_offset.y = sum.y / sample_count;
+    accel_offset.z = (sum.z / sample_count) - 1.0f; 
+
+    printf("Calibration complete: Offset X: %.3f, Y: %.3f, Z: %.3f\n",
+           accel_offset.x, accel_offset.y, accel_offset.z);
+}
+
+void calibrate_gyro(uint16_t sample_count) {
+    gyro_data_t sum = {0};
+
+    for (int i = 0; i < sample_count; i++) {
+        gyro_data_t sample = mpu6050_read_gyro();
+        sum.x += sample.x;
+        sum.y += sample.y;
+        sum.z += sample.z;
+        delay_ms_rtos(CALIBRATION_DELAY_MS);
+    }
+
+    gyro_offset.x = sum_x / sample_count;
+    gyro_offset.y = sum_y / sample_count;
+    gyro_offset.z = sum_z / sample_count;
+
+    printf("Gyro calibration complete: Offset X: %.3f, Y: %.3f, Z: %.3f\n",
+       gyro_offset.x, gyro_offset.y, gyro_offset.z);
+
+}
+
+accel_data_t get_accel_calibration(void) {
+    return accel_offset;
 }
 
 gyro_data_t get_gyro_calibration(void) {
     return gyro_offset;
 }
 
-void calibrate_gyro(void) {
-    int32_t sum_x = 0, sum_y = 0, sum_z = 0;
-
-    for (int i = 0; i < CALIBRATION_SAMPLES; i++) {
-        gyro_data_t sample = mpu6050_read_gyro();
-        sum_x += (int32_t)(sample.x * 1000);  // scale up to avoid float sum errors
-        sum_y += (int32_t)(sample.y * 1000);
-        sum_z += (int32_t)(sample.z * 1000);
-
-        // small delay between samples if needed
-        delay_ms_rtos(1);
-    }
-
-    gyro_data_t offset = {
-        .x = sum_x / (float)CALIBRATION_SAMPLES / 1000.0f,
-        .y = sum_y / (float)CALIBRATION_SAMPLES / 1000.0f,
-        .z = sum_z / (float)CALIBRATION_SAMPLES / 1000.0f
-    };
-
-    set_gyro_calibration(offset);
+ISR(INT0_vect) {
+    motion_detected = true;
 }
+
+void setup_motion_interrupt(void) {
+    cli();  // Disable interrupts during config
+
+    // Configure INT0 (PD2, Arduino pin 2) for rising edge trigger
+    EICRA |= (1 << ISC01) | (1 << ISC00);  // ISC01=1, ISC00=1 -> Rising edge
+    EIMSK |= (1 << INT0);                  // Enable external interrupt INT0
+
+    sei();  // Re-enable global interrupts
+}
+
+int init_mpu6050_w_cal(void) {
+    if (init_mpu6050(mpu6050_write_reg, rtos_delay_ms) != 0) {
+        printf("MPU6050 initialization failed.\r\n");
+        return -1;
+    }
+    setup_motion_interrupt();
+    calibrate_accelerometer(500);
+    calibrate_gyro(500);
+
+    printf("MPU6050 calibration complete.\r\n");
+    return 0;
+}
+
+
+
+
+// void mpu6050_read_raw(int16_t *ax, int16_t *ay, int16_t *az)
+// {
+//     *ax = read_raw_axis(REG_ACCEL_X_MEASURE_1, mpu6050_read_reg);
+//     *ay = read_raw_axis(REG_ACCEL_Y_MEASURE_1, mpu6050_read_reg);
+//     *az = read_raw_axis(REG_ACCEL_Z_MEASURE_1, mpu6050_read_reg);
+// }
+
+// void delay_ms(uint32_t ms) {
+//     uint32_t start_tick = rtos_clock_count;
+//     // Assuming rtos_clock_count increments every 10 ms
+//     uint32_t wait_ticks = ms / 10;
+//     if (wait_ticks == 0) wait_ticks = 1;  // Minimum 1 tick wait
+
+//     while ((rtos_clock_count - start_tick) < wait_ticks) {
+//         //sleep_cpu();
+//         //printf("Hello!");
+//     }
+// }
+// // Helper to read a 16-bit signed value from two registers
+// static int16_t mpu6050_read_16bit(uint8_t reg_high, uint8_t reg_low) {
+//     uint8_t high_byte, low_byte;
+//     if (mpu6050_read_reg(reg_high, &high_byte) != 0) {
+//         return 0; // or handle error as you prefer
+//     }
+//     if (mpu6050_read_reg(reg_low, &low_byte) != 0) {
+//         return 0; // or handle error
+//     }
+//     return (int16_t)(((uint16_t)high_byte << 8) | low_byte);
+// }
