@@ -1,12 +1,12 @@
-#include "rtos.h"
 #include "mfrc522.h"
 #include "controller_state.h"
-#include "uart.h"  // for optional debug messages
+#include "uart.h"
+#include "rtos.h"
 
 #define RFID_CS_PIN  PB2  // D10
 #define RFID_RST_PIN PB1  // D9
 
-static MFRC522 rfid;
+MFRC522 rfid;
 
 void check_rfid(void) {
     static bool initialized = false;

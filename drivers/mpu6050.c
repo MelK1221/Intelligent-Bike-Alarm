@@ -6,13 +6,11 @@
  * Implementations of functions that initialize and read data from
  * the MPU6050
  */
-#include <math.h>
-
-#include "reg_options.h"
 #include "mpu6050.h"
-#include "rtos.h"
 #include <stdio.h>
-
+#include <math.h>
+#include "reg_options.h"
+#include "rtos.h"
 
 
 uint16_t init_mpu6050(MPU6050_REG_WRITE_TYPE writeReg, DELAY_MS_TYPE delay)

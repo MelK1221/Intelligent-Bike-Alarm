@@ -1,5 +1,5 @@
-#include "controller_state.h"
 #include <stdio.h>
+#include "controller_state.h"
 #include "rtos.h"
 
 void send_bt_alert(void) {

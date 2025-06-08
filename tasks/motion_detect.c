@@ -1,10 +1,10 @@
+#include <math.h>
 #include "mpu6050.h"
 #include "mpu6050_helper.h"
 #include "reg_options.h"
 #include "controller_state.h"
-#include "rtos.h"
-#include <math.h>
 #include "uart.h"
+#include "rtos.h"
 
 #define THRESHOLD 1.5f
 #define GYRO_THRESHOLD 5.0f 

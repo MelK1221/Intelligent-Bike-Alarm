@@ -1,7 +1,8 @@
 #include "mfrc522.h"
-#include <avr/io.h>
+
 #include <util/delay.h>
 #include <string.h>
+#include <avr/io.h>
 
 // Adjust these to your wiring
 #define SPI_DDR  DDRB

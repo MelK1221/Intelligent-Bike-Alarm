@@ -1,13 +1,13 @@
-#include "mpu6050.h"
-#include "reg_options.h"
 #include "mpu6050_helper.h"
-#include "twi_master.h"
-#include "rtos.h"
-#include <avr/sleep.h>
 #include <stdio.h>
 #include <stddef.h>
 #include <string.h> 
 #include <stdint.h>
+#include <avr/sleep.h>
+#include "mpu6050.h"
+#include "reg_options.h"
+#include "twi_master.h"
+#include "rtos.h"
 
 #define MPU6050_ADDR 0x68  // default I2C address for MPU6050
 #define ACCEL_SCALE 4096.0f
