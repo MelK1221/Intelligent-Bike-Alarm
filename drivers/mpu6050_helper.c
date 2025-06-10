@@ -4,20 +4,20 @@
 #include <stddef.h>
 #include <string.h> 
 #include <stdint.h>
+#include <avr/interrupt.h>
 
 #include "mpu6050.h"
 #include "sleep.h"
 #include "reg_options.h"
 #include "twi_master.h"
-#include "controller_state_h"
+#include "controller_state.h"
 #include "rtos.h"
 
-#define MPU6050_ADDR 0x68  // default I2C address for MPU6050
 #define ACCEL_SCALE 4096.0f
 #define GYRO_SCALE 131.0f
-#define CALIBRATION_DELAY_MS 5
-#define ACCEL_START_REG 0x3B;
-#define GYRO_START_REG 0x43;
+#define CALIBRATION_DELAY_MS 10
+#define ACCEL_START_REG 0x3B
+#define GYRO_START_REG 0x43
 #define MPU6050_BURST_LEN 6
 
 
@@ -28,9 +28,9 @@ static gyro_data_t gyro_offset = {0};
 
 int mpu6050_read_reg(uint8_t reg, uint8_t *data) {
     uint8_t reg_addr = (uint8_t)reg;
-    if (tw_master_transmit(MPU6050_ADDR, &reg_addr, 1, true) != SUCCESS)
+    if (tw_master_transmit(MPU_6050_ADDR, &reg_addr, 1, true) != SUCCESS)
         return -1;
-    if (tw_master_receive(MPU6050_ADDR, data, 1) != SUCCESS)
+    if (tw_master_receive(MPU_6050_ADDR, data, 1) != SUCCESS)
         return -1;
     return 0;
 }
@@ -38,7 +38,7 @@ int mpu6050_read_reg(uint8_t reg, uint8_t *data) {
 int mpu6050_write_reg(uint8_t reg, uint8_t data) {
     uint8_t buf[2] = {reg, data};
     printf("Writing reg 0x%02X with data 0x%02X\n", reg, data);
-    int ret = tw_master_transmit(MPU6050_ADDR, buf, 2, false);
+    int ret = tw_master_transmit(MPU_6050_ADDR, buf, 2, false);
     printf("tw_master_transmit returned %d\n", ret);
     if (ret != SUCCESS) {
         printf("Write failed\n");
@@ -49,9 +49,9 @@ int mpu6050_write_reg(uint8_t reg, uint8_t data) {
 
 int mpu6050_read_burst(uint16_t reg, uint8_t *data, uint16_t len) {
     uint8_t reg_addr = (uint8_t)reg;
-    if (tw_master_transmit(MPU6050_ADDR, &reg_addr, 1, true) != SUCCESS)
+    if (tw_master_transmit(MPU_6050_ADDR, &reg_addr, 1, true) != SUCCESS)
         return -1;
-    if (tw_master_receive(MPU6050_ADDR, data, len) != SUCCESS)
+    if (tw_master_receive(MPU_6050_ADDR, data, len) != SUCCESS)
         return -1;
     return 0;
 }
@@ -62,7 +62,7 @@ accel_data_t mpu6050_read_accel(void) {
 
     // Read 6 bytes from ACCEL_XOUT_H to ACCEL_ZOUT_L
     if (mpu6050_read_burst(ACCEL_START_REG, raw_data, MPU6050_BURST_LEN) != 0) {
-        printf("Error reading accelerometer data\n");
+        DEBUG_PRINT("Error reading accelerometer data\n");
         return accel;
     }
 
@@ -83,7 +83,7 @@ gyro_data_t mpu6050_read_gyro(void) {
 
     // Read 6 bytes from GYRO_XOUT_H to GYRO_ZOUT_L
     if (mpu6050_read_burst(GYRO_START_REG, raw_data, MPU6050_BURST_LEN) != 0) {
-        printf("Error reading gyroscope data\n");
+        DEBUG_PRINT("Error reading gyroscope data\n");
         return gyro;
     }
 
@@ -100,20 +100,28 @@ gyro_data_t mpu6050_read_gyro(void) {
 
 void calibrate_accelerometer(uint16_t sample_count) {
     accel_data_t sum = {0};
+    uint16_t successful_reads = 0;
     for (uint16_t i = 0; i < sample_count; i++) {
         accel_data_t sample = mpu6050_read_accel();
+        if (sample.x == 0.0f && sample.y == 0.0f && sample.z == 0.0f) {
+            continue;  // skip failed read
+        }
         sum.x += sample.x;
         sum.y += sample.y;
         sum.z += sample.z;
-        delay_ms_rtos(CALIBRATION_DELAY_MS);
+        successful_reads++;
+        rtos_delay_ms(CALIBRATION_DELAY_MS);
     }
 
+    if (successful_reads == 0) {
+        DEBUG_PRINT("Accelerometer calibration failed: no valid samples.\n");
+        return;
+    }
     accel_offset.x = sum.x / sample_count;
     accel_offset.y = sum.y / sample_count;
     accel_offset.z = (sum.z / sample_count) - 1.0f; 
 
-    printf("Calibration complete: Offset X: %.3f, Y: %.3f, Z: %.3f\n",
-           accel_offset.x, accel_offset.y, accel_offset.z);
+    DEBUG_PRINT("Accelerometer calibration complete: Offset X: %.3f, Y: %.3f, Z: %.3f\n", accel_offset.x, accel_offset.y, accel_offset.z);
 }
 
 void calibrate_gyro(uint16_t sample_count) {
@@ -124,15 +132,14 @@ void calibrate_gyro(uint16_t sample_count) {
         sum.x += sample.x;
         sum.y += sample.y;
         sum.z += sample.z;
-        delay_ms_rtos(CALIBRATION_DELAY_MS);
+        rtos_delay_ms(CALIBRATION_DELAY_MS);
     }
 
-    gyro_offset.x = sum_x / sample_count;
-    gyro_offset.y = sum_y / sample_count;
-    gyro_offset.z = sum_z / sample_count;
+    gyro_offset.x = sum.x / sample_count;
+    gyro_offset.y = sum.y / sample_count;
+    gyro_offset.z = sum.z / sample_count;
 
-    printf("Gyro calibration complete: Offset X: %.3f, Y: %.3f, Z: %.3f\n",
-       gyro_offset.x, gyro_offset.y, gyro_offset.z);
+    DEBUG_PRINT("Gyro calibration complete: Offset X: %.3f, Y: %.3f, Z: %.3f\n", gyro_offset.x, gyro_offset.y, gyro_offset.z);
 
 }
 
@@ -145,7 +152,9 @@ gyro_data_t get_gyro_calibration(void) {
 }
 
 ISR(INT0_vect) {
-    motion_detected = true;
+    PORTB ^= (1 << PB5); // Toggle LED
+    DEBUG_PRINT("INT0: Motion detected interrupt.\n");
+    set_motion_detected(true);
 }
 
 void setup_motion_interrupt(void) {
@@ -160,14 +169,14 @@ void setup_motion_interrupt(void) {
 
 int init_mpu6050_w_cal(void) {
     if (init_mpu6050(mpu6050_write_reg, rtos_delay_ms) != 0) {
-        printf("MPU6050 initialization failed.\r\n");
+        DEBUG_PRINT("MPU6050 initialization failed.\r\n");
         return -1;
     }
     setup_motion_interrupt();
-    calibrate_accelerometer(500);
-    calibrate_gyro(500);
+    calibrate_accelerometer(1000);
+    calibrate_gyro(1000);
 
-    printf("MPU6050 calibration complete.\r\n");
+    DEBUG_PRINT("MPU6050 calibration complete.\r\n");
     return 0;
 }
 

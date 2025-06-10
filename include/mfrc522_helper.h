@@ -1,5 +1,5 @@
-#ifndef RFID_HELPER_H
-#define RFID_HELPER_H
+#ifndef MFRC522_HELPER_H
+#define MFRC522_HELPER_H
 
 #include "mfrc522.h"
 
@@ -19,4 +19,4 @@ void init_rfid(void);
 rfid_tag_t mfrc522_get_tag(void);
 bool is_authorized_tag(const rfid_tag_t* tag);
 
-#endif // RFID_HELPER_H
+#endif // MFRC522_HELPER_H

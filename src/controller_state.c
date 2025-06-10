@@ -4,8 +4,9 @@
 static volatile bool alarm_armed = false;
 static volatile bool alarm_triggered = false;
 static volatile bool motion_detected = false;
+static volatile bool waiting_for_rfid = false;
 
-void set_system_armed(bool state) {
+void set_alarm_armed(bool state) {
     alarm_armed = state;
 
     if (!state) {
@@ -36,4 +37,12 @@ void set_motion_detected(bool state) {
 
 bool is_motion_detected(void) {
     return motion_detected;
+}
+
+void set_wait_rfid(bool state) {
+    waiting_for_rfid = state;
+}
+
+bool is_wait_rfid(void) {
+    return waiting_for_rfid;
 }

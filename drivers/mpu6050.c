@@ -9,7 +9,7 @@
 #include "mpu6050.h"
 
 #include <stdio.h>
-#include <math.h>
+//#include <math.h>
 
 #include "reg_options.h"
 #include "rtos.h"
@@ -22,14 +22,14 @@ uint16_t init_mpu6050(MPU6050_REG_WRITE_TYPE writeReg, DELAY_MS_TYPE delay)
         printf("ERROR: Failed to write REG_PWR_MGMT_1\n");
         return 1;
     }
-    delay_ms_rtos(100);
+    rtos_delay_ms(100);
 
     printf("MPU6050: Resetting signal paths...\n");
     if (writeReg(REG_USER_CTRL, I2C_MST_RESET | SIG_COND_RESET) != 0) {
         printf("ERROR: Failed to write REG_USER_CTRL\n");
         return 2;
     }
-    delay_ms_rtos(100);
+    rtos_delay_ms(100);
 
     printf("MPU6050: Setting clock source...\n");
     if (writeReg(REG_PWR_MGMT_1, PWR_MGMT_CLK_SEL_INTERNAL) != 0) {
@@ -43,8 +43,29 @@ uint16_t init_mpu6050(MPU6050_REG_WRITE_TYPE writeReg, DELAY_MS_TYPE delay)
         return 4;
     }
 
-    delay_ms_rtos(1000);
-    printf("MPU6050: Initialization complete.\n");
+    delay(100);
+
+    // === Motion detection configuration ===
+    printf("MPU6050: Setting accelerometer range to ±2g...\n");
+    if (writeReg(REG_ACCEL_CONFIG, 0x00) != 0) return 5;
+
+    printf("MPU6050: Setting motion threshold...\n");
+    if (writeReg(REG_MOT_THR, 0x01) != 0) return 6;  // Adjust sensitivity here
+
+    printf("MPU6050: Setting motion duration...\n");
+    if (writeReg(REG_MOT_DUR, 0x01) != 0) return 7;
+
+    printf("MPU6050: Enabling motion detection logic...\n");
+    if (writeReg(REG_MOT_DETECT_CTRL, 0x15) != 0) return 8;
+
+    printf("MPU6050: Configuring interrupt pin behavior...\n");
+    if (writeReg(REG_INT_PIN_CFG, 0x10) != 0) return 9;  // Latch interrupt until INT_STATUS read
+
+    printf("MPU6050: Enabling motion interrupt...\n");
+    if (writeReg(REG_INT_ENABLE, 0x40) != 0) return 10;
+
+    delay(1000);
+    printf("MPU6050: Initialization and motion config complete.\n");
 
     return 0;
 }

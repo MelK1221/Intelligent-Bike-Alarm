@@ -1,9 +1,11 @@
-#ifndef SLEEP_DRIVER_H
-#define SLEEP_DRIVER_H
+#ifndef SLEEP_H
+#define SLEEP_H
 
-extern uint32_t last_motion_time;
+#include <stdint.h>
+
+extern volatile uint32_t last_motion_time;
 
 void init_sleep(void);
 void enter_sleep_mode(void);
 
-#endif
+#endif // SLEEP_H

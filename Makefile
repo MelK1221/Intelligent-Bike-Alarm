@@ -5,7 +5,7 @@ TARGET = smart-bike-alarm
 MCU = atmega328p
 F_CPU = 16000000UL
 PROGRAMMER = arduino
-PORT = /dev/ttyUSB0
+PORT = /dev/tty.usbmodem1101
 BAUD = 115200
 
 # Toolchain
@@ -26,6 +26,7 @@ OBJ_EXT = o
 CFLAGS = -Wall -Os -mmcu=$(MCU) -DF_CPU=$(F_CPU)
 CFLAGS += $(addprefix -I,$(INC_DIRS))  # Include header directories
 CFLAGS += -DDEBUG_RTOS
+LDFLAGS = -Wl,-u,vfprintf -lprintf_flt -lm
 
 # Find all source files
 SRCS := $(shell find $(SRC_DIRS) -name '*.$(SRC_EXT)')
@@ -41,7 +42,7 @@ $(BUILD_DIR)/%.o: %.c
 
 # Link object files into ELF binary
 $(BUILD_DIR)/$(TARGET).elf: $(OBJS)
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
 
 # Convert ELF to HEX
 $(BUILD_DIR)/$(TARGET).hex: $(BUILD_DIR)/$(TARGET).elf

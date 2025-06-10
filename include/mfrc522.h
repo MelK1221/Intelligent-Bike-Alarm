@@ -68,4 +68,4 @@ uint8_t MFRC522_CalculateCRC(MFRC522 *dev, uint8_t *data, uint8_t length, uint8_
 bool MFRC522_PICC_IsNewCardPresent(MFRC522 *dev);
 bool MFRC522_PICC_ReadCardSerial(MFRC522 *dev, MFRC522_Uid *uid);
 
-#endif
+#endif // MFRC522_H

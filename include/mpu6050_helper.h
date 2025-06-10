@@ -7,10 +7,10 @@ typedef struct {
     float x;
     float y;
     float z;
-} 3d_data_t;
+} dim3_data_t;
 
-typedef 3d_data_t accel_data_t;
-typedef 3d_data_t gyro_data_t;
+typedef dim3_data_t accel_data_t;
+typedef dim3_data_t gyro_data_t;
 
 int mpu6050_read_reg(uint8_t reg, uint8_t *data);
 int mpu6050_write_reg(uint8_t reg, uint8_t data);
@@ -23,4 +23,4 @@ accel_data_t get_accel_calibration(void);
 gyro_data_t get_gyro_calibration(void);
 int init_mpu6050_w_cal(void);
 
-#endif
+#endif // MPU6050_HELPER_H

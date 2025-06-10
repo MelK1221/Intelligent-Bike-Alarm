@@ -1,3 +1,5 @@
+#include "activate_buzzer.h"
+
 #include "buzzer.h"
 #include "controller_state.h"
 #include "rtos.h"
@@ -7,6 +9,10 @@ void buzzer_alert(void) {
     static uint32_t last_switch_time = 0;
 
     if (is_alarm_triggered()) {
+        if (!buzzer_on && last_switch_time == 0) {
+            last_switch_time = rtos_get_clock_count();
+        }
+        
         if (rtos_get_clock_count() - last_switch_time >= 1000) {
             buzzer_on = !buzzer_on;
             if (buzzer_on) {
@@ -17,6 +23,10 @@ void buzzer_alert(void) {
             last_switch_time = rtos_get_clock_count();
         }
     } else {
-        buzz_off();
-        buzzer_on = false;
+        if (buzzer_on) {
+            buzz_off();
+            buzzer_on = false;
+        }
+        last_switch_time = 0;
     }
+}

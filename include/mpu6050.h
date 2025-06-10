@@ -28,7 +28,7 @@ extern "C" {
 
 //macro to turn raw data into a gyro or accel reading
 #define TRANSFORM(upper, lower, scaler) \
-    ((int16_t)(((uint16_t)upper << 8) | lower)) / (float)scaler;
+    (((int16_t)(((uint16_t)(upper) << 8) | (lower))) / (float)(scaler))
 
 
 /// @brief Functions in this library expect a parameter function

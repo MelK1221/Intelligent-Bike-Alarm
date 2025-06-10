@@ -28,7 +28,4 @@ uint32_t rtos_get_clock_count(void);
 void rtos_scheduler(void);
 void rtos_delay_ms(uint32_t delay_ms);
 
-//extern volatile uint32_t clock_count;
-//extern uint8_t task_count;
-
-#endif
+#endif // RTOS_H

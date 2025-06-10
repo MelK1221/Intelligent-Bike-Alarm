@@ -1,3 +1,5 @@
+#include "motion_detect.h"
+
 #include <math.h>
 #include "mpu6050.h"
 #include "mpu6050_helper.h"
@@ -52,15 +54,15 @@ void detect_motion(void) {
 
     if (motion_detected_now) {
         if (!initial_motion_detected) {
-            motion_start_time = rtos_clock_count;
+            motion_start_time = rtos_get_clock_count();
             initial_motion_detected = true;
-            printf("Motion detected.");
+            DEBUG_PRINT("Motion detected.\n");
         } else {
             // Check if 3 seconds have passed
-            if ((rtos_clock_count - motion_start_time) >= 3000) {
+            if ((rtos_get_clock_count() - motion_start_time) >= 3000) {
                 if (!is_alarm_triggered()) {
                     set_alarm_triggered(true);
-                    printf("Alarm TRIGGERED by motion!");
+                    DEBUG_PRINT("Alarm TRIGGERED by motion!\n");
                 }
                 set_motion_detected(true);
                 initial_motion_detected = false;  // lock out re-trigger

@@ -8,9 +8,9 @@ typedef enum {
     DISARMED_BUZZ
 } buzzer_sequence_t;
 
-void buzz_init(void);
+void init_buzz(void);
 void buzz_on(void);
 void buzz_off(void);
 void buzz_tone_seq(buzzer_sequence_t sequence);
 
-#endif
+#endif // BUZZER_H

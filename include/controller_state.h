@@ -3,12 +3,14 @@
 
 #include <stdbool.h>
 
-extern volatile bool motion_detected;
-extern volatile bool alarm_armed;
-extern volatile bool alarm_triggered;
+void set_alarm_armed(bool state);
+void toggle_alarm_armed(void);
+bool is_alarm_armed(void);
+void set_alarm_triggered(bool state);
+bool is_alarm_triggered(void);
+void set_motion_detected(bool state);
+bool is_motion_detected(void);
+void set_wait_rfid(bool state);
+bool is_wait_rfid(void);
 
-bool is_system_armed(void);
-void set_system_armed(bool state);
-void toggle_system_armed(void);
-
-#endif
+#endif // CONTROLLER_STATE_H

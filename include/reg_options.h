@@ -173,6 +173,20 @@ extern "C" {
 #define FIFO_OFLOW_EN (0x10) //fifo buffer overflow will generate an interrupt
 #define DATA_RDY_EN (0x01) //setting this bit enables an interrupt that is generated each time the sensor registers are written to
 
+// Motion detection threshold and duration
+#define REG_MOT_THR            0x1F
+#define REG_MOT_DUR            0x20
+
+// Motion detection control
+#define REG_MOT_DETECT_CTRL    0x69
+
+// Interrupt configuration and status
+#define REG_INT_PIN_CFG        0x37
+#define REG_INT_STATUS         0x3A
+
+// INT_ENABLE bits
+// #define MOT_INT_EN             0x40  // Motion detection
+
 #ifdef __cplusplus
 }
 #endif
