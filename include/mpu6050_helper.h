@@ -21,6 +21,6 @@ void calibrate_accelerometer(uint16_t sample_count);
 void calibrate_gyro(uint16_t sample_count);
 accel_data_t get_accel_calibration(void);
 gyro_data_t get_gyro_calibration(void);
-int init_mpu6050_w_cal(void);
+int init_mpu6050_w_interrupt(void);
 
 #endif // MPU6050_HELPER_H

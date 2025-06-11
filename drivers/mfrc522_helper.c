@@ -26,16 +26,18 @@ void init_rfid(void) {
 
 rfid_tag_t mfrc522_get_tag(void) {
     rfid_tag_t tag = {0};
-    MFRC522_Uid uid;
-    if (MFRC522_PICC_IsNewCardPresent(&rfid)) {
+    MFRC522_Uid uid = {0};
+    bool temp1 = MFRC522_PICC_IsNewCardPresent(&rfid);
+    DEBUG_PRINT("Card Present = %d\n", temp1);
+    if (temp1) {
         if (MFRC522_PICC_ReadCardSerial(&rfid, &uid)) {
             memcpy(tag.uid, uid.uidByte, UID_LENGTH);
             DEBUG_PRINT("RFID UID: %02X %02X %02X %02X\n", tag.uid[0], tag.uid[1], tag.uid[2], tag.uid[3]);
         } else {
-            DEBUG_PRINT("RFID: Card present, but UID read failed.\n");
+            //
         }
     } else {
-        DEBUG_PRINT("RFID: No tag present.\n");
+        //DEBUG_PRINT("RFID: No tag present.\n");
     }
     return tag;
 }

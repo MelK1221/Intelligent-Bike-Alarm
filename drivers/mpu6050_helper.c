@@ -153,7 +153,7 @@ gyro_data_t get_gyro_calibration(void) {
 
 ISR(INT0_vect) {
     PORTB ^= (1 << PB5); // Toggle LED
-    DEBUG_PRINT("INT0: Motion detected interrupt.\n");
+   // DEBUG_PRINT("INT0: Motion detected interrupt.\n");
     set_motion_detected(true);
 }
 
@@ -167,16 +167,16 @@ void setup_motion_interrupt(void) {
     sei();  // Re-enable global interrupts
 }
 
-int init_mpu6050_w_cal(void) {
+int init_mpu6050_w_interrupt(void) {
     if (init_mpu6050(mpu6050_write_reg, rtos_delay_ms) != 0) {
         DEBUG_PRINT("MPU6050 initialization failed.\r\n");
         return -1;
     }
     setup_motion_interrupt();
-    calibrate_accelerometer(1000);
-    calibrate_gyro(1000);
+    //calibrate_accelerometer(1000);
+    //calibrate_gyro(1000);
 
-    DEBUG_PRINT("MPU6050 calibration complete.\r\n");
+    DEBUG_PRINT("MPU6050 initialization complete.\r\n");
     return 0;
 }
 

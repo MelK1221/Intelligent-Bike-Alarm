@@ -1,6 +1,7 @@
 #include "rtos.h"
 #include <stdio.h>
 #include <avr/interrupt.h>
+#include <avr/wdt.h>
 
 static AddedTask task_list[MAX_TASKS];
 static uint8_t task_count = 0;
@@ -20,13 +21,14 @@ uint32_t rtos_get_clock_count(void) {
     cli();
     temp = clock_count;
     sei();
-    return temp
+    return temp;
 }
 
 void rtos_delay_ms(uint32_t delay_ms) {
     uint32_t start = rtos_get_clock_count();
     while ((rtos_get_clock_count() - start) < delay_ms) {
-       rtos_scheduler();  // Let other RTOS tasks run during delay
+       rtos_scheduler();  // Let other RTOS tasks run during dela
+       wdt_reset();
     }
 }
 

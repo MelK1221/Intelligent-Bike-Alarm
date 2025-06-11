@@ -1,75 +1,67 @@
-#include "motion_detect.h"
 
-#include <math.h>
-#include "mpu6050.h"
-#include "mpu6050_helper.h"
-#include "reg_options.h"
+// #include "controller_state.h"
+// #include "buzzer.h"
+// #include "uart.h"
+// #include "rtos.h"
+
+// #define RFID_DELAY_AFTER_MOTION_MS 100
+
+// // Module-static variables
+// static uint32_t last_motion_time = 0;
+// static bool rfid_ready = true; // Expose this via a getter if needed
+
+// void detect_motion(void) {
+//     // Check if motion was detected (set by ISR)
+//     if (is_motion_detected()) {
+//         DEBUG_PRINT("Motion detected!\n");
+
+//         // Only trigger alarm if system is armed and alarm not already triggered
+//         if (is_alarm_armed() && !is_alarm_triggered()) {
+//             set_alarm_triggered(true);
+//             //buzz_tone_seq(ALARM_BUZZ);
+//             DEBUG_PRINT("Alarm triggered due to motion!\n");
+//         }
+
+//         // Start RFID cooldown period
+//         last_motion_time = rtos_get_clock_count();
+//         rfid_ready = false;
+
+//         // Clear the motion flag so we only handle once per event.
+//         set_motion_detected(false);
+//     }
+
+//     // Check if RFID is not ready and cooldown has passed
+//     if (!rfid_ready && (rtos_get_clock_count() - last_motion_time >= RFID_DELAY_AFTER_MOTION_MS)) {
+//         rfid_ready = true;
+//         DEBUG_PRINT("RFID ready after motion cooldown.\n");
+//     }
+// }
+
+// // Add this getter if your RFID scan logic is in a different file
+// bool is_rfid_ready(void) {
+//     return rfid_ready;
+// }
+
 #include "controller_state.h"
+#include "buzzer.h"
 #include "uart.h"
 #include "rtos.h"
 
-#define ACCEL_THRESHOLD 1.5f
-#define GYRO_THRESHOLD 5.0f 
-#define ACCEL_SCALE 4096.0f
-#define STATIONARY_G 1.0f
 
+// Example: task runs every ~100ms
 void detect_motion(void) {
-    static bool initial_motion_detected = false;
-    static uint32_t motion_start_time = 0;
+    // Check if motion was detected (set by ISR)
+    if (is_motion_detected()) {
+        DEBUG_PRINT("Motion detected!\n");
 
-    if (!is_alarm_armed()) {
-        set_motion_detected(false);
-        initial_motion_detected = false;
-        return;
-    }
-
-    accel_data_t offset = get_accel_calibration();
-    gyro_data_t gyro_offset = get_gyro_calibration();
-
-    accel_data_t raw_accel_data = mpu6050_read_accel();
-    gyro_data_t raw_gyro_data = mpu6050_read_gyro();
-
-    accel_data_t corrected_a = {
-        .x = raw_accel_data.x - offset.x,
-        .y = raw_accel_data.y - offset.y,
-        .z = raw_accel_data.z - offset.z
-    };
-
-    gyro_data_t corrected_g = {
-        .x = raw_gyro_data.x - gyro_offset.x,
-        .y = raw_gyro_data.y - gyro_offset.y,
-        .z = raw_gyro_data.z - gyro_offset.z
-    };
-
-    float total_accel = sqrtf(corrected_a.x * corrected_a.x +
-                              corrected_a.y * corrected_a.y +
-                              corrected_a.z * corrected_a.z);
-
-    bool accel_motion = fabsf(total_accel - STATIONARY_G) > ACCEL_THRESHOLD;
-    bool gyro_motion = fabsf(corrected_g.x) > GYRO_THRESHOLD ||
-                       fabsf(corrected_g.y) > GYRO_THRESHOLD ||
-                       fabsf(corrected_g.z) > GYRO_THRESHOLD;
-
-    bool motion_detected_now = accel_motion || gyro_motion;
-
-    if (motion_detected_now) {
-        if (!initial_motion_detected) {
-            motion_start_time = rtos_get_clock_count();
-            initial_motion_detected = true;
-            DEBUG_PRINT("Motion detected.\n");
-        } else {
-            // Check if 3 seconds have passed
-            if ((rtos_get_clock_count() - motion_start_time) >= 3000) {
-                if (!is_alarm_triggered()) {
-                    set_alarm_triggered(true);
-                    DEBUG_PRINT("Alarm TRIGGERED by motion!\n");
-                }
-                set_motion_detected(true);
-                initial_motion_detected = false;  // lock out re-trigger
-            }
+        // Only trigger alarm if system is armed and alarm not already triggered
+        if (is_alarm_armed() && !is_alarm_triggered()) {
+            set_alarm_triggered(true);
+            //buzz_tone_seq(ALARM_BUZZ);
+            DEBUG_PRINT("Alarm triggered due to motion!\n");
         }
-    } else {
-        initial_motion_detected = false;
+
+        // Clear the motion flag so we only handle once per event.
         set_motion_detected(false);
     }
 }
