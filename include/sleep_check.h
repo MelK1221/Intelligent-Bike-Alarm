@@ -2,7 +2,9 @@
 #define SLEEP_CHECK_H
 
 #include <stdbool.h>
+#include <stdint.h>
 
+extern uint32_t wait_rfid_start_time;
 extern volatile bool in_sleep_mode;
 
 void check_sleep(void);

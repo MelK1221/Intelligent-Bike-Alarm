@@ -32,7 +32,7 @@ void check_rfid(void) {
     }
 
     // 2. Debounce: only scan once per 200ms
-    if (now - last_scan_time < 200) {
+    if (now - last_scan_time < 1000) {
         //DEBUG_PRINT("Return due to last_scan_time");
         return;
     }
@@ -80,7 +80,7 @@ void check_rfid(void) {
         } else {
             buzz_tone_seq(DISARMED_BUZZ);
         }
-        //set_wait_rfid(false);
+        set_wait_rfid(false);
 
         DEBUG_PRINT("RFID tag scanned: system %s\n", is_alarm_armed() ? "armed" : "disarmed");
     } else {

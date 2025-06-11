@@ -63,18 +63,18 @@ int main(void) {
 
     rtos_init();
 
-    //init_sleep();
+    init_sleep();
     init_buzz();
     init_rfid();
     init_mpu6050_w_interrupt();
 
     sei();
 
-    rtos_add_task(detect_motion, 60, 0);
-    rtos_add_task(check_rfid, 100, 35);
+    rtos_add_task(detect_motion, 100, 0);
+    rtos_add_task(check_rfid, 700, 35);
     rtos_add_task(buzzer_alert, 50, 10);
     rtos_add_task(send_bt_alert, 100, 50);
-    //rtos_add_task(check_sleep, 100, 100);
+    rtos_add_task(check_sleep, 100, 100);
 
 
     while (1) {

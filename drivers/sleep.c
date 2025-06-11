@@ -6,6 +6,7 @@
 
 #include "sleep_check.h"
 #include "mfrc522_helper.h"
+#include "controller_state.h"
 #include "rtos.h"
 
 volatile uint32_t last_motion_time = 0;
@@ -13,6 +14,8 @@ volatile uint32_t last_wakeup_time = 0;
 
 void init_sleep(void) {
     last_motion_time = rtos_get_clock_count();
+    set_wait_rfid(true);
+    wait_rfid_start_time = rtos_get_clock_count();
 }
 
 void enter_sleep_mode(void) {
@@ -29,7 +32,7 @@ void enter_sleep_mode(void) {
 #endif
 
     sei();
-
+    //DEBUG_PRINT("Entering sleep\n");
     sleep_cpu(); // MCU sleeps here
 
     // --- MCU resumes here after wakeup ---
