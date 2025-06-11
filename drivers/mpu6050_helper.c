@@ -13,17 +13,17 @@
 #include "controller_state.h"
 #include "rtos.h"
 
-#define ACCEL_SCALE 4096.0f
-#define GYRO_SCALE 131.0f
-#define CALIBRATION_DELAY_MS 10
+// #define ACCEL_SCALE 4096.0f
+// #define GYRO_SCALE 131.0f
+// #define CALIBRATION_DELAY_MS 10
 #define ACCEL_START_REG 0x3B
 #define GYRO_START_REG 0x43
 #define MPU6050_BURST_LEN 6
 
 
 // Calibration offsets (initialized to 0)
-static accel_data_t accel_offset = {0};
-static gyro_data_t gyro_offset = {0};
+// static accel_data_t accel_offset = {0};
+// static gyro_data_t gyro_offset = {0};
 
 
 int mpu6050_read_reg(uint8_t reg, uint8_t *data) {
@@ -37,119 +37,119 @@ int mpu6050_read_reg(uint8_t reg, uint8_t *data) {
 
 int mpu6050_write_reg(uint8_t reg, uint8_t data) {
     uint8_t buf[2] = {reg, data};
-    printf("Writing reg 0x%02X with data 0x%02X\n", reg, data);
+    //DEBUG_PRINT("Writing reg 0x%02X with data 0x%02X\n", reg, data);
     int ret = tw_master_transmit(MPU_6050_ADDR, buf, 2, false);
-    printf("tw_master_transmit returned %d\n", ret);
+    //DEBUG_PRINT("tw_master_transmit returned %d\n", ret);
     if (ret != SUCCESS) {
-        printf("Write failed\n");
+        DEBUG_PRINT("Write failed\n");
         return -1;
     }
     return 0;
 }
 
-int mpu6050_read_burst(uint16_t reg, uint8_t *data, uint16_t len) {
-    uint8_t reg_addr = (uint8_t)reg;
-    if (tw_master_transmit(MPU_6050_ADDR, &reg_addr, 1, true) != SUCCESS)
-        return -1;
-    if (tw_master_receive(MPU_6050_ADDR, data, len) != SUCCESS)
-        return -1;
-    return 0;
-}
+// int mpu6050_read_burst(uint16_t reg, uint8_t *data, uint16_t len) {
+//     uint8_t reg_addr = (uint8_t)reg;
+//     if (tw_master_transmit(MPU_6050_ADDR, &reg_addr, 1, true) != SUCCESS)
+//         return -1;
+//     if (tw_master_receive(MPU_6050_ADDR, data, len) != SUCCESS)
+//         return -1;
+//     return 0;
+// }
 
-accel_data_t mpu6050_read_accel(void) {
-    uint8_t raw_data[6];
-    accel_data_t accel = {0};
+// accel_data_t mpu6050_read_accel(void) {
+//     uint8_t raw_data[6];
+//     accel_data_t accel = {0};
 
-    // Read 6 bytes from ACCEL_XOUT_H to ACCEL_ZOUT_L
-    if (mpu6050_read_burst(ACCEL_START_REG, raw_data, MPU6050_BURST_LEN) != 0) {
-        DEBUG_PRINT("Error reading accelerometer data\n");
-        return accel;
-    }
+//     // Read 6 bytes from ACCEL_XOUT_H to ACCEL_ZOUT_L
+//     if (mpu6050_read_burst(ACCEL_START_REG, raw_data, MPU6050_BURST_LEN) != 0) {
+//         DEBUG_PRINT("Error reading accelerometer data\n");
+//         return accel;
+//     }
 
-    int16_t raw_x = (int16_t)((raw_data[0] << 8) | raw_data[1]);
-    int16_t raw_y = (int16_t)((raw_data[2] << 8) | raw_data[3]);
-    int16_t raw_z = (int16_t)((raw_data[4] << 8) | raw_data[5]);
+//     int16_t raw_x = (int16_t)((raw_data[0] << 8) | raw_data[1]);
+//     int16_t raw_y = (int16_t)((raw_data[2] << 8) | raw_data[3]);
+//     int16_t raw_z = (int16_t)((raw_data[4] << 8) | raw_data[5]);
 
-    accel.x = (float)raw_x / ACCEL_SCALE;
-    accel.y = (float)raw_y / ACCEL_SCALE;
-    accel.z = (float)raw_z / ACCEL_SCALE;
+//     accel.x = (float)raw_x / ACCEL_SCALE;
+//     accel.y = (float)raw_y / ACCEL_SCALE;
+//     accel.z = (float)raw_z / ACCEL_SCALE;
 
-    return accel;
-}
+//     return accel;
+// }
 
-gyro_data_t mpu6050_read_gyro(void) {
-    uint8_t raw_data[6];
-    gyro_data_t gyro = {0};
+// gyro_data_t mpu6050_read_gyro(void) {
+//     uint8_t raw_data[6];
+//     gyro_data_t gyro = {0};
 
-    // Read 6 bytes from GYRO_XOUT_H to GYRO_ZOUT_L
-    if (mpu6050_read_burst(GYRO_START_REG, raw_data, MPU6050_BURST_LEN) != 0) {
-        DEBUG_PRINT("Error reading gyroscope data\n");
-        return gyro;
-    }
+//     // Read 6 bytes from GYRO_XOUT_H to GYRO_ZOUT_L
+//     if (mpu6050_read_burst(GYRO_START_REG, raw_data, MPU6050_BURST_LEN) != 0) {
+//         DEBUG_PRINT("Error reading gyroscope data\n");
+//         return gyro;
+//     }
 
-    int16_t raw_x = (int16_t)((raw_data[0] << 8) | raw_data[1]);
-    int16_t raw_y = (int16_t)((raw_data[2] << 8) | raw_data[3]);
-    int16_t raw_z = (int16_t)((raw_data[4] << 8) | raw_data[5]);
+//     int16_t raw_x = (int16_t)((raw_data[0] << 8) | raw_data[1]);
+//     int16_t raw_y = (int16_t)((raw_data[2] << 8) | raw_data[3]);
+//     int16_t raw_z = (int16_t)((raw_data[4] << 8) | raw_data[5]);
 
-    gyro.x = (float)raw_x / GYRO_SCALE;
-    gyro.y = (float)raw_y / GYRO_SCALE;
-    gyro.z = (float)raw_z / GYRO_SCALE;
+//     gyro.x = (float)raw_x / GYRO_SCALE;
+//     gyro.y = (float)raw_y / GYRO_SCALE;
+//     gyro.z = (float)raw_z / GYRO_SCALE;
 
-    return gyro;
-}
+//     return gyro;
+// }
 
-void calibrate_accelerometer(uint16_t sample_count) {
-    accel_data_t sum = {0};
-    uint16_t successful_reads = 0;
-    for (uint16_t i = 0; i < sample_count; i++) {
-        accel_data_t sample = mpu6050_read_accel();
-        if (sample.x == 0.0f && sample.y == 0.0f && sample.z == 0.0f) {
-            continue;  // skip failed read
-        }
-        sum.x += sample.x;
-        sum.y += sample.y;
-        sum.z += sample.z;
-        successful_reads++;
-        rtos_delay_ms(CALIBRATION_DELAY_MS);
-    }
+// void calibrate_accelerometer(uint16_t sample_count) {
+//     accel_data_t sum = {0};
+//     uint16_t successful_reads = 0;
+//     for (uint16_t i = 0; i < sample_count; i++) {
+//         accel_data_t sample = mpu6050_read_accel();
+//         if (sample.x == 0.0f && sample.y == 0.0f && sample.z == 0.0f) {
+//             continue;  // skip failed read
+//         }
+//         sum.x += sample.x;
+//         sum.y += sample.y;
+//         sum.z += sample.z;
+//         successful_reads++;
+//         rtos_delay_ms(CALIBRATION_DELAY_MS);
+//     }
 
-    if (successful_reads == 0) {
-        DEBUG_PRINT("Accelerometer calibration failed: no valid samples.\n");
-        return;
-    }
-    accel_offset.x = sum.x / sample_count;
-    accel_offset.y = sum.y / sample_count;
-    accel_offset.z = (sum.z / sample_count) - 1.0f; 
+//     if (successful_reads == 0) {
+//         DEBUG_PRINT("Accelerometer calibration failed: no valid samples.\n");
+//         return;
+//     }
+//     accel_offset.x = sum.x / sample_count;
+//     accel_offset.y = sum.y / sample_count;
+//     accel_offset.z = (sum.z / sample_count) - 1.0f; 
 
-    DEBUG_PRINT("Accelerometer calibration complete: Offset X: %.3f, Y: %.3f, Z: %.3f\n", accel_offset.x, accel_offset.y, accel_offset.z);
-}
+//     DEBUG_PRINT("Accelerometer calibration complete: Offset X: %.3f, Y: %.3f, Z: %.3f\n", accel_offset.x, accel_offset.y, accel_offset.z);
+// }
 
-void calibrate_gyro(uint16_t sample_count) {
-    gyro_data_t sum = {0};
+// void calibrate_gyro(uint16_t sample_count) {
+//     gyro_data_t sum = {0};
 
-    for (int i = 0; i < sample_count; i++) {
-        gyro_data_t sample = mpu6050_read_gyro();
-        sum.x += sample.x;
-        sum.y += sample.y;
-        sum.z += sample.z;
-        rtos_delay_ms(CALIBRATION_DELAY_MS);
-    }
+//     for (int i = 0; i < sample_count; i++) {
+//         gyro_data_t sample = mpu6050_read_gyro();
+//         sum.x += sample.x;
+//         sum.y += sample.y;
+//         sum.z += sample.z;
+//         rtos_delay_ms(CALIBRATION_DELAY_MS);
+//     }
 
-    gyro_offset.x = sum.x / sample_count;
-    gyro_offset.y = sum.y / sample_count;
-    gyro_offset.z = sum.z / sample_count;
+//     gyro_offset.x = sum.x / sample_count;
+//     gyro_offset.y = sum.y / sample_count;
+//     gyro_offset.z = sum.z / sample_count;
 
-    DEBUG_PRINT("Gyro calibration complete: Offset X: %.3f, Y: %.3f, Z: %.3f\n", gyro_offset.x, gyro_offset.y, gyro_offset.z);
+//     DEBUG_PRINT("Gyro calibration complete: Offset X: %.3f, Y: %.3f, Z: %.3f\n", gyro_offset.x, gyro_offset.y, gyro_offset.z);
 
-}
+// }
 
-accel_data_t get_accel_calibration(void) {
-    return accel_offset;
-}
+// accel_data_t get_accel_calibration(void) {
+//     return accel_offset;
+// }
 
-gyro_data_t get_gyro_calibration(void) {
-    return gyro_offset;
-}
+// gyro_data_t get_gyro_calibration(void) {
+//     return gyro_offset;
+// }
 
 ISR(INT0_vect) {
     PORTB ^= (1 << PB5); // Toggle LED

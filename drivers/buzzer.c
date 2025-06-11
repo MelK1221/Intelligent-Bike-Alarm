@@ -11,6 +11,7 @@
 void init_buzz(void) {
     BUZZER_DDR |= (1 << BUZZER_PIN);
     BUZZER_PORT &= ~(1 << BUZZER_PIN);
+    DEBUG_PRINT("Buzzer Initialized\n");
 }
 
 void buzz_on(void) {

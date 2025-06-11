@@ -56,18 +56,18 @@ void check_rfid(void) {
     }
 
     if (!tag_present) {
-         DEBUG_PRINT("Return due to no tag present\n");
+         //DEBUG_PRINT("Return due to no tag present\n");
         // No tag, do not process further
         return;
     }
 
     // Only print 'No tag present' on state change
     if (!tag_present && last_tag_present) {
-        DEBUG_PRINT("No tag present\n");
+        //DEBUG_PRINT("No tag present\n");
         last_tag_present = false;
         return;
     }
-    DEBUG_PRINT("Change last tag state to true");
+    //DEBUG_PRINT("Change last tag state to true");
     last_tag_present = true;
 
     if (is_authorized_tag(&tag)) {
