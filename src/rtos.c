@@ -27,7 +27,7 @@ uint32_t rtos_get_clock_count(void) {
 void rtos_delay_ms(uint32_t delay_ms) {
     uint32_t start = rtos_get_clock_count();
     while ((rtos_get_clock_count() - start) < delay_ms) {
-       rtos_scheduler();  // Let other RTOS tasks run during dela
+       //rtos_scheduler();  // Let other RTOS tasks run during dela
        wdt_reset();
     }
 }

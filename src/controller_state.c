@@ -1,5 +1,6 @@
 #include "controller_state.h"
 #include <stdbool.h>
+#include "rtos.h"
 
 static volatile bool alarm_armed = false;
 static volatile bool alarm_triggered = false;
@@ -41,6 +42,8 @@ bool is_motion_detected(void) {
 
 void set_wait_rfid(bool state) {
     waiting_for_rfid = state;
+    //DEBUG_PRINT("waiting_for_rfid = %s\n", waiting_for_rfid ? "true" : "false");
+
 }
 
 bool is_wait_rfid(void) {

@@ -6,7 +6,7 @@
 
 // For debugging
 #ifdef DEBUG_RTOS
-#define DEBUG_PRINT(...) printf(__VA_ARGS__)
+#define DEBUG_PRINT(...) do { printf(__VA_ARGS__); fflush(stdout); } while (0)
 #else
 #define DEBUG_PRINT(...)
 #endif

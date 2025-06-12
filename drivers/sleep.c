@@ -10,7 +10,7 @@
 #include "rtos.h"
 
 volatile uint32_t last_motion_time = 0;
-volatile uint32_t last_wakeup_time = 0;
+//volatile uint32_t last_wakeup_time = 0;
 
 void init_sleep(void) {
     last_motion_time = rtos_get_clock_count();
@@ -39,10 +39,10 @@ void enter_sleep_mode(void) {
     sleep_disable();
 
     // Wakeup logic: ensure flags/timestamps are correct
-    last_wakeup_time = rtos_get_clock_count();
+    //last_wakeup_time = rtos_get_clock_count();
 
     // If you need to re-init RFID, do it here:
     // MFRC522_Init(&rfid, RFID_CS_PIN, RFID_RST_PIN);
 
-    DEBUG_PRINT("MCU woke up from sleep.\n");
+    //DEBUG_PRINT("MCU woke up from sleep.\n");
 }

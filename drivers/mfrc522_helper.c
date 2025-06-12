@@ -53,6 +53,7 @@ rfid_tag_t mfrc522_get_tag(void) {
     // return tag;
 
 bool is_authorized_tag(const rfid_tag_t* tag) {
+    //DEBUG_PRINT("RFID UID: %02X %02X %02X %02X\n", tag->uid[0], tag->uid[1], tag->uid[2], tag->uid[3]);
     for (int i = 0; i < NUM_AUTH_TAGS; ++i) {
         if (memcmp(tag->uid, authorized_tags[i].uid, UID_LENGTH) == 0) {
             return true;

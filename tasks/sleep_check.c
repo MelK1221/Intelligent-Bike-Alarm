@@ -1,4 +1,6 @@
 #include "sleep_check.h"
+
+#include "buzzer.h"
 #include "controller_state.h"
 #include "rtos.h"
 #include "sleep.h"
@@ -16,7 +18,7 @@ void check_sleep(void) {
         if (in_sleep_mode) {
             // We just woke up
             DEBUG_PRINT("Woke up due to motion or alarm.\n");
-            last_wakeup_time = rtos_get_clock_count();
+            //last_wakeup_time = rtos_get_clock_count();
             set_wait_rfid(true);
             wait_rfid_start_time = rtos_get_clock_count();
             in_sleep_mode = false; // Now awake
@@ -47,8 +49,10 @@ void check_sleep(void) {
         }
         
         if (!in_sleep_mode) {
+            buzz_off();
             in_sleep_mode = true;
             DEBUG_PRINT("Entering sleep: system disarmed.\n");
+            rtos_delay_ms(10);
             enter_sleep_mode();
         }
         return;
