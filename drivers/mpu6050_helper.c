@@ -22,8 +22,8 @@
 
 
 // Calibration offsets (initialized to 0)
-static accel_data_t accel_offset = {0};
-static gyro_data_t gyro_offset = {0};
+static accel_data_t accel_offset = { 0.089f, -0.234f, 3.405f };
+static gyro_data_t gyro_offset  = { -2.654f, 3.655f, -0.552f };
 
 
 int mpu6050_read_reg(uint8_t reg, uint8_t *data) {
@@ -184,8 +184,8 @@ int init_mpu6050_w_interrupt(void) {
         return -1;
     }
     setup_motion_interrupt();
-    calibrate_accelerometer(1000);
-    calibrate_gyro(1000);
+    //calibrate_accelerometer(1000);
+    //calibrate_gyro(1000);
 
     DEBUG_PRINT("MPU6050 initialization complete.\r\n");
     return 0;

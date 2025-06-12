@@ -63,10 +63,11 @@ int main(void) {
 
     rtos_init();
 
-    init_sleep();
+    //init_sleep();
     init_buzz();
     init_rfid();
     init_mpu6050_w_interrupt();
+    init_sleep();
 
     sei();
 
