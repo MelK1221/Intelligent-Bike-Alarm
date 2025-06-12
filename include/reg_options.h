@@ -97,21 +97,21 @@ extern "C" {
 
 
 //self test registers
-#define REG_SELF_TEST_X (0x0D)
-#define XG_TEST_MASK (0x1F)
-#define XA_TEST_UPPER_MASK (0xE0)
-#define REG_SELF_TEST_Y (0x0E)
-#define YG_TEST_MASK (0x1F)
-#define YA_TEST_UPPER_MASK (0xE0)
-#define REG_SELF_TEST_Z (0x0F)
-#define ZG_TEST_MASK (0x1F)
-#define ZA_TEST_UPPER_MASK (0xE0)
+// #define REG_SELF_TEST_X (0x0D)
+// #define XG_TEST_MASK (0x1F)
+// #define XA_TEST_UPPER_MASK (0xE0)
+// #define REG_SELF_TEST_Y (0x0E)
+// #define YG_TEST_MASK (0x1F)
+// #define YA_TEST_UPPER_MASK (0xE0)
+// #define REG_SELF_TEST_Z (0x0F)
+// #define ZG_TEST_MASK (0x1F)
+// #define ZA_TEST_UPPER_MASK (0xE0)
 
 //accelerometer less significant portion of self test
-#define REG_SELF_TEST_A (0x10) 
-#define XA_TEST_LOWER_MASK (0x30)
-#define YA_TEST_LOWER_MASK (0x0C)
-#define ZA_TEST_LOWER_MASK (0x03)
+// #define REG_SELF_TEST_A (0x10) 
+// #define XA_TEST_LOWER_MASK (0x30)
+// #define YA_TEST_LOWER_MASK (0x0C)
+// #define ZA_TEST_LOWER_MASK (0x03)
 
 //Accelerometer config and self test activation register
 #define REG_ACCEL_CONFIG (0x1C)
@@ -172,6 +172,20 @@ extern "C" {
 #define REG_INT_ENABLE (0x38)
 #define FIFO_OFLOW_EN (0x10) //fifo buffer overflow will generate an interrupt
 #define DATA_RDY_EN (0x01) //setting this bit enables an interrupt that is generated each time the sensor registers are written to
+
+// Motion detection threshold and duration
+#define REG_MOT_THR            0x1F
+#define REG_MOT_DUR            0x20
+
+// Motion detection control
+#define REG_MOT_DETECT_CTRL    0x69
+
+// Interrupt configuration and status
+#define REG_INT_PIN_CFG        0x37
+#define REG_INT_STATUS         0x3A
+
+// INT_ENABLE bits
+// #define MOT_INT_EN             0x40  // Motion detection
 
 #ifdef __cplusplus
 }

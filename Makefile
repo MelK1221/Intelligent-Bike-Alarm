@@ -1,46 +1,60 @@
-# === CONFIGURATION ===
+# Project name
+TARGET = smart-bike-alarm
+
+# MCU and programmer settings
 MCU = atmega328p
 F_CPU = 16000000UL
 PROGRAMMER = arduino
-PORT = /dev/tty.usbmodem1101  # ← update this for your machine
+PORT = /dev/tty.usbmodem1101
 BAUD = 115200
 
-# === FILES ===
-TARGET = bike_alarm
-SRC = main.c rtos.c controller_state.c tasks/motion_detect.c tasks/bt_alert.c tasks/activate_buzzer.c tasks/rfid.c drivers/uart.c drivers/mpu6050.c drivers/mpu6050_helper.c drivers/twi_master.c drivers/buzzer.c drivers/mfrc522.c
-OBJ = $(SRC:.c=.o)
-
-# === TOOLS ===
+# Toolchain
 CC = avr-gcc
 OBJCOPY = avr-objcopy
 AVRDUDE = avrdude
 
-# === FLAGS ===
-CFLAGS = -mmcu=$(MCU) -DF_CPU=$(F_CPU) -Os -Wall \
-         -I. -Itasks -Idrivers
-LDFLAGS = -mmcu=$(MCU) -Wl,-u,vfprintf -lprintf_flt -lm
+# Directories
+SRC_DIRS = src drivers tasks
+INC_DIRS = include
+BUILD_DIR = build
 
-# === DEFAULT TARGET ===
-all: $(TARGET).hex
+# File extensions
+SRC_EXT = c
+OBJ_EXT = o
 
-# Compile .c to .o
-%.o: %.c
+# Compiler flags
+CFLAGS = -Wall -Os -mmcu=$(MCU) -DF_CPU=$(F_CPU)
+CFLAGS += $(addprefix -I,$(INC_DIRS))  # Include header directories
+CFLAGS += -DDEBUG_RTOS
+LDFLAGS = -Wl,-u,vfprintf -lprintf_flt -lm
+
+# Find all source files
+SRCS := $(shell find $(SRC_DIRS) -name '*.$(SRC_EXT)')
+OBJS := $(patsubst %.c,$(BUILD_DIR)/%.o,$(SRCS))
+
+# Default rule
+all: $(BUILD_DIR)/$(TARGET).hex
+
+# Compile each object file
+$(BUILD_DIR)/%.o: %.c
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Link object files to ELF
-$(TARGET).elf: $(OBJ)
-	$(CC) $(LDFLAGS) $^ -o $@
+# Link object files into ELF binary
+$(BUILD_DIR)/$(TARGET).elf: $(OBJS)
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
 
 # Convert ELF to HEX
-$(TARGET).hex: $(TARGET).elf
+$(BUILD_DIR)/$(TARGET).hex: $(BUILD_DIR)/$(TARGET).elf
 	$(OBJCOPY) -O ihex -R .eeprom $< $@
 
-# Upload to Arduino
-upload: $(TARGET).hex
-	$(AVRDUDE) -c $(PROGRAMMER) -p $(MCU) -P $(PORT) -b $(BAUD) -U flash:w:$(TARGET).hex:i
+# Upload using avrdude
+upload: $(BUILD_DIR)/$(TARGET).hex
+	$(AVRDUDE) -c $(PROGRAMMER) -p $(MCU) -P $(PORT) -b $(BAUD) -U flash:w:$<
 
-# Clean up build files
+# Clean build artifacts
 clean:
-	rm -f *.o tasks/*.o drivers/*.o *.elf *.hex
+	rm -rf $(BUILD_DIR)
 
-.PHONY: all clean upload
+# Phony targets
+.PHONY: all upload clean
