@@ -1,6 +1,4 @@
 #include "controller_state.h"
-#include <stdbool.h>
-#include "rtos.h"
 
 static volatile bool alarm_armed = false;
 static volatile bool alarm_triggered = false;

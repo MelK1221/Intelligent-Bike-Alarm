@@ -1,14 +1,5 @@
 #include "sleep.h"
 
-#include <avr/sleep.h>
-#include <avr/interrupt.h>
-#include <stdint.h>
-
-#include "sleep_check.h"
-#include "mfrc522_helper.h"
-#include "controller_state.h"
-#include "rtos.h"
-
 volatile uint32_t last_motion_time = 0;
 //volatile uint32_t last_wakeup_time = 0;
 

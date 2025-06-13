@@ -1,12 +1,5 @@
 #include "timer.h"
 
-#include <avr/io.h>
-#include <avr/interrupt.h>
-#include <stdio.h>
-#include <stdint.h>
-
-#include "rtos.h"
-
 void init_timer1(void) {
     cli();
     

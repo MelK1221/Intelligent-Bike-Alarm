@@ -1,9 +1,5 @@
 #include "buzzer.h"
 
-#include <avr/io.h>
-
-#include "rtos.h"
-
 #define BUZZER_DDR  DDRD
 #define BUZZER_PORT PORTD
 #define BUZZER_PIN  PD3

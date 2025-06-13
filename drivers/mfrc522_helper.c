@@ -1,9 +1,5 @@
 #include "mfrc522_helper.h"
 
-#include <avr/io.h>
-#include <string.h>
-#include "rtos.h"
-
 #define NUM_AUTH_TAGS 2
 #define RFID_RST_PIN PB1
 #define RFID_CS_PIN PB2
@@ -41,16 +37,6 @@ rfid_tag_t mfrc522_get_tag(void) {
     }
     return tag;
 }
-    // rfid_tag_t tag = {0};
-    // tag.valid = false;
-    // MFRC522_Uid uid;
-    // if (MFRC522_PICC_IsNewCardPresent(&rfid) && MFRC522_PICC_ReadCardSerial(&rfid, &uid)) {
-    //     memcpy(tag.uid, uid.uidByte, UID_LENGTH);  // assumes UID is 4 bytes
-    //     tag.valid = true;
-    // }
-    // DEBUG_PRINT("RFID UID: %02X %02X %02X %02X\r\n", tag.uid[0], tag.uid[1], tag.uid[2], tag.uid[3]);
-
-    // return tag;
 
 bool is_authorized_tag(const rfid_tag_t* tag) {
     //DEBUG_PRINT("RFID UID: %02X %02X %02X %02X\n", tag->uid[0], tag->uid[1], tag->uid[2], tag->uid[3]);

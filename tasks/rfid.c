@@ -1,12 +1,4 @@
 #include "rfid.h"
-#include "mfrc522.h"
-#include "mfrc522_helper.h"
-#include "buzzer.h"
-#include "controller_state.h"
-#include "uart.h"
-#include "rtos.h"
-#include "sleep_check.h"
-#include <avr/wdt.h>
 
 #define RFID_CS_PIN  PB2  // D10
 #define RFID_RST_PIN PB1  // D9

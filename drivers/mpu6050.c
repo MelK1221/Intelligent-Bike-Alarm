@@ -8,13 +8,6 @@
  */
 #include "mpu6050.h"
 
-#include <stdio.h>
-//#include <math.h>
-
-#include "reg_options.h"
-#include "rtos.h"
-
-
 uint16_t init_mpu6050(MPU6050_REG_WRITE_TYPE writeReg, DELAY_MS_TYPE delay)
 {
     //DEBUG_PRINT("MPU6050: Resetting power management...\n");
@@ -50,10 +43,10 @@ uint16_t init_mpu6050(MPU6050_REG_WRITE_TYPE writeReg, DELAY_MS_TYPE delay)
     if (writeReg(REG_ACCEL_CONFIG, 0x00) != 0) return 5;
 
     //DEBUG_PRINT("MPU6050: Setting motion threshold...\n");
-    if (writeReg(REG_MOT_THR, 0x02) != 0) return 6;  // Adjust sensitivity here
+    if (writeReg(REG_MOT_THR, 0x01) != 0) return 6;  // Adjust sensitivity here
 
     //DEBUG_PRINT("MPU6050: Setting motion duration...\n");
-    if (writeReg(REG_MOT_DUR, 0x02) != 0) return 7;
+    if (writeReg(REG_MOT_DUR, 0x01) != 0) return 7;
 
     //DEBUG_PRINT("MPU6050: Enabling motion detection logic...\n");
     if (writeReg(REG_MOT_DETECT_CTRL, 0x15) != 0) return 8;

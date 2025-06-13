@@ -13,6 +13,7 @@
 #include <util/twi.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
 
 #define DEBUG_LOG			0
 #define SUCCESS				0

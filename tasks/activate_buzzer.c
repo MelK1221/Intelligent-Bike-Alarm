@@ -1,9 +1,5 @@
 #include "activate_buzzer.h"
 
-#include "buzzer.h"
-#include "controller_state.h"
-#include "rtos.h"
-
 void buzzer_alert(void) {
     static bool buzzer_on = false;
     static uint32_t last_switch_time = 0;

@@ -2,6 +2,9 @@
 #define BUZZER_H
 
 #include <stdint.h>
+#include <avr/io.h>
+
+#include "rtos.h"
 
 typedef enum {
     ARMED_BUZZ,

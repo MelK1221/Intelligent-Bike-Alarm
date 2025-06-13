@@ -4,6 +4,11 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include "buzzer.h"
+#include "sleep.h"
+#include "controller_state.h"
+#include "rtos.h"
+
 extern uint32_t wait_rfid_start_time;
 extern volatile bool in_sleep_mode;
 

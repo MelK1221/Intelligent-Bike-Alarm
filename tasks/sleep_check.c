@@ -1,10 +1,5 @@
 #include "sleep_check.h"
 
-#include "buzzer.h"
-#include "controller_state.h"
-#include "rtos.h"
-#include "sleep.h"
-
 #define SLEEP_TIMEOUT_MS 90000UL  // 90 seconds
 #define WAIT_RFID_TIMEOUT_MS 30000UL // 30 seconds
 
@@ -24,7 +19,7 @@ void check_sleep(void) {
             in_sleep_mode = false; // Now awake
         }
 
-        set_motion_detected(false);
+        //set_motion_detected(false);
         return;
     }
     

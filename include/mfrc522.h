@@ -3,6 +3,12 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <util/delay.h>
+#include <string.h>
+#include <avr/io.h>
+#include <stdio.h>
+
+#include "rtos.h"
 
 #define MFRC522_UNUSED_PIN 0xFF
 

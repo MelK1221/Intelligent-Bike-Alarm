@@ -3,6 +3,8 @@
 
 #include <stdbool.h>
 
+#include "rtos.h"
+
 void set_alarm_armed(bool state);
 void toggle_alarm_armed(void);
 bool is_alarm_armed(void);

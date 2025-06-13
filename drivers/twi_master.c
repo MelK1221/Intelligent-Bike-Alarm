@@ -6,8 +6,6 @@
 */
 
 #include "twi_master.h"
-#include <stdio.h>
-
 
 static ret_code_t tw_start(void)
 {

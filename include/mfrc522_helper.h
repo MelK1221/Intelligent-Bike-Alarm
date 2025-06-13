@@ -3,8 +3,12 @@
 
 #include "mfrc522.h"
 
+#include <avr/io.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <string.h>
+
+#include "rtos.h"
 
 #define UID_LENGTH 4
 

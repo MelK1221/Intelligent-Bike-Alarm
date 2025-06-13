@@ -15,6 +15,11 @@ extern "C" {
 #endif
 
 #include <stdint.h>
+#include <stdio.h>
+//#include <math.h>
+
+#include "reg_options.h"
+#include "rtos.h"
 
 
 #define SIZE_1_BYTE (1)

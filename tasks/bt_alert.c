@@ -1,10 +1,5 @@
 #include "bt_alert.h"
 
-#include <stdio.h>
-#include "timer.h"
-#include "controller_state.h"
-#include "rtos.h"
-
 void send_bt_alert(void) {
     static bool already_reported = false;
 

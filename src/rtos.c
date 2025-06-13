@@ -1,7 +1,4 @@
 #include "rtos.h"
-#include <stdio.h>
-#include <avr/interrupt.h>
-#include <avr/wdt.h>
 
 static AddedTask task_list[MAX_TASKS];
 static uint8_t task_count = 0;
