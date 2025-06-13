@@ -10,6 +10,7 @@
 #include "rtos.h"
 
 extern uint32_t wait_rfid_start_time;
+extern uint32_t armed_wake_time;
 extern volatile bool in_sleep_mode;
 
 void check_sleep(void);

@@ -24,7 +24,7 @@ int mpu6050_write_reg(uint8_t reg, uint8_t data) {
 
 ISR(INT0_vect) {
     PORTB ^= (1 << PB5); // Toggle LED
-   DEBUG_PRINT("INT0: Motion\n");
+   // DEBUG_PRINT("INT0: Motion\n");
     set_motion_detected(true);
 }
 

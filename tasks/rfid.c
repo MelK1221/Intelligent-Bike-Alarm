@@ -4,26 +4,13 @@
 #define RFID_RST_PIN PB1  // D9
 #define RFID_WAKEUP_COOLDOWN_MS 100  // Wait 100ms after wakeup before scanning
 
-//extern volatile uint32_t last_wakeup_time;
-
 void check_rfid(void) {
     static uint32_t last_scan_time = 0;
     static bool last_tag_present = false;
 
     uint32_t now = rtos_get_clock_count();
 
-    //DEBUG_PRINT("check_rfid running, now=%lu\n", now);
-    //DEBUG_PRINT("last_scan_time=%lu, elapsed=%lu\n", last_scan_time, now - last_scan_time);
-    // DEBUG_PRINT("last_wakeup_time=%lu, since_wakeup=%lu\n", last_wakeup_time, now - last_wakeup_time);
-    // DEBUG_PRINT("last_tag_present=%d\n", last_tag_present);
-
-    // 1. Wait a short cooldown after wakeup before scanning RFID
-    // if ((last_wakeup_time != 0) && (now - last_wakeup_time < RFID_WAKEUP_COOLDOWN_MS)) {
-    //     //DEBUG_PRINT("Return due to wakeup_time");
-    //     return;
-    // }
-
-    // 2. Debounce: only scan once per second
+    // Scan once per second
     if (now - last_scan_time < 1000) {
         //DEBUG_PRINT("Return due to last_scan_time");
         return;
@@ -72,15 +59,14 @@ void check_rfid(void) {
         if (!is_alarm_triggered()) {
             if (is_alarm_armed()) {
                 buzz_tone_seq(ARMED_BUZZ);
+                armed_wake_time = rtos_get_clock_count();
             } else {
                 buzz_tone_seq(DISARMED_BUZZ);
+                set_alarm_triggered(false);
             }
-        }
 
-        set_alarm_triggered(false);
-        set_motion_detected(false);
-        //DEBUG_PRINT("in_RFID\n");
-        set_wait_rfid(false);
+            set_wait_rfid(false);
+        }
 
         //DEBUG_PRINT("RFID tag scanned: system %s\n", is_alarm_armed() ? "armed" : "disarmed");
     } else {
