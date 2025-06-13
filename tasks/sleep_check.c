@@ -5,8 +5,8 @@
 #include "rtos.h"
 #include "sleep.h"
 
-#define SLEEP_TIMEOUT_MS 90000UL  // 60 seconds
-#define WAIT_RFID_TIMEOUT_MS 60000UL // 30 seconds
+#define SLEEP_TIMEOUT_MS 90000UL  // 90 seconds
+#define WAIT_RFID_TIMEOUT_MS 30000UL // 30 seconds
 
 uint32_t wait_rfid_start_time = 0;
 volatile bool in_sleep_mode = false;
