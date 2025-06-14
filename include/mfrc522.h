@@ -1,3 +1,8 @@
+/* RFID scanner module (MFRC522) driver header file
+* Adapted from https://github.com/miguelbalboa/rfid.git
+* Arduino library for MFRC522 module by miguelbalboa
+*/
+
 #ifndef MFRC522_H
 #define MFRC522_H
 

@@ -1,3 +1,5 @@
+// RFID scanner module helper functions header file
+
 #ifndef MFRC522_HELPER_H
 #define MFRC522_HELPER_H
 

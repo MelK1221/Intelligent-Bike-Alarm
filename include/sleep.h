@@ -1,3 +1,5 @@
+// Sleep mode driver header file
+
 #ifndef SLEEP_H
 #define SLEEP_H
 
@@ -10,7 +12,6 @@
 #include "controller_state.h"
 #include "rtos.h"
 
-extern volatile uint32_t last_motion_time;
 //extern volatile uint32_t last_wakeup_time;
 
 void init_sleep(void);

@@ -1,3 +1,5 @@
+// Sleep check task puts system in sleep mode when appropriate state changes or timeouts are reached
+
 #include "sleep_check.h"
 
 #define SLEEP_TIMEOUT_MS 90000UL  // 90 seconds

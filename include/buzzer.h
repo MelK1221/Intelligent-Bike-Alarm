@@ -1,3 +1,5 @@
+// Active buzzer driver header file
+
 #ifndef BUZZER_H
 #define BUZZER_H
 

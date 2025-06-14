@@ -1,3 +1,5 @@
+// Bluetooth alert task header file
+
 #ifndef BT_ALERT_H
 #define BT_ALERT_H
 

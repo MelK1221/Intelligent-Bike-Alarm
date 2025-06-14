@@ -1,3 +1,5 @@
+// Activate buzzer task header file
+
 #ifndef ACTIVATE_BUZZER_H
 #define ACTIVATE_BUZZER_H
 

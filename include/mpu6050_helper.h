@@ -1,3 +1,5 @@
+// Accelerometer (MPU6050) module helper functions header file
+
 #ifndef MPU6050_HELPER_H
 #define MPU6050_HELPER_H
 

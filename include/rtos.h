@@ -1,3 +1,5 @@
+// Real-time operating system header file
+
 #ifndef RTOS_H
 #define RTOS_H
 

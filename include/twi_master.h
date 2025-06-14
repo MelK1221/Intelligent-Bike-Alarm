@@ -1,3 +1,8 @@
+/* TWI driver for I2C interface header file
+* Sourced from https://github.com/Sovichea/avr-i2c-library.git
+* Implementation of TWI on AVR microcontrollers library by Tep Sovichea
+*/
+
 /*
 * twi_master.h
 *

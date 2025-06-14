@@ -1,10 +1,11 @@
+// Motion detect task controls state of alarm triggered flag
+
 #include "motion_detect.h"
 
 void detect_motion(void) {
     // Check for motion interrupt from ISR
     if (is_motion_detected()) {
-        DEBUG_PRINT("Motion detected!\n");
-        last_motion_time = rtos_get_clock_count();
+        //last_motion_time = rtos_get_clock_count();
 
 
         // Only trigger alarm if system is armed and alarm not already triggered

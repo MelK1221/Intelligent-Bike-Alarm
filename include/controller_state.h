@@ -1,3 +1,5 @@
+// Controller state header file
+
 #ifndef CONTROLLER_STATE_H
 #define CONTROLLER_STATE_H
 
