@@ -2,8 +2,9 @@
 
 #include "bt_alert.h"
 
+static bool already_reported = false; // Track if alert has already been sent
+
 void send_bt_alert(void) {
-    static bool already_reported = false; // Track if alert has already been sent
 
     // If alarm is triggered and message has not yet been sent, send ALERT
     if (is_alarm_triggered() && !already_reported) {
@@ -16,3 +17,12 @@ void send_bt_alert(void) {
         already_reported = false;
     }
 }
+
+#ifdef UNIT_TEST
+void reset_bt_alert_state(void) {
+    // Must be in the same file as already_reported
+    extern void _reset_bt_already_reported(void); // for clarity, but not needed
+    // This function can access static variables because it's in the same file
+    already_reported = false;
+}
+#endif

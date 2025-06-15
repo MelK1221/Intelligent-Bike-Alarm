@@ -3,8 +3,11 @@
 #ifndef RTOS_H
 #define RTOS_H
 
+#ifdef __AVR__
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
+#endif
+
 #include <stdint.h>
 #include <stdio.h>
 

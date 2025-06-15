@@ -3,8 +3,11 @@
 #ifndef TIMER_H
 #define TIMER_H
 
+#ifdef __AVR__
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#endif
+
 #include <stdio.h>
 #include <stdint.h>
 
