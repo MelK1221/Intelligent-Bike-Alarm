@@ -19,6 +19,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/BikeAlarmTests.dir/tests/motion_detect_test.cpp.o.d"
   "CMakeFiles/BikeAlarmTests.dir/tests/rfid_test.cpp.o"
   "CMakeFiles/BikeAlarmTests.dir/tests/rfid_test.cpp.o.d"
+  "CMakeFiles/BikeAlarmTests.dir/tests/sleep_check_test.cpp.o"
+  "CMakeFiles/BikeAlarmTests.dir/tests/sleep_check_test.cpp.o.d"
   "CMakeFiles/BikeAlarmTests.dir/tests/test_mocks.c.o"
   "CMakeFiles/BikeAlarmTests.dir/tests/test_mocks.c.o.d"
 )

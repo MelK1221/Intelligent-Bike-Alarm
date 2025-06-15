@@ -85,12 +85,12 @@ clean: CMakeFiles/BikeAlarmTests.dir/clean
 CMakeFiles/BikeAlarmTests.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/BikeAlarmTests.dir/build.make CMakeFiles/BikeAlarmTests.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/BikeAlarmTests.dir/build.make CMakeFiles/BikeAlarmTests.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11 "Built target BikeAlarmTests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12 "Built target BikeAlarmTests"
 .PHONY : CMakeFiles/BikeAlarmTests.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/BikeAlarmTests.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/build/CMakeFiles 12
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/BikeAlarmTests.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/build/CMakeFiles 0
 .PHONY : CMakeFiles/BikeAlarmTests.dir/rule
@@ -102,7 +102,7 @@ BikeAlarmTests: CMakeFiles/BikeAlarmTests.dir/rule
 # codegen rule for target.
 CMakeFiles/BikeAlarmTests.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/BikeAlarmTests.dir/build.make CMakeFiles/BikeAlarmTests.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11 "Finished codegen for target BikeAlarmTests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12 "Finished codegen for target BikeAlarmTests"
 .PHONY : CMakeFiles/BikeAlarmTests.dir/codegen
 
 # clean rule for target.

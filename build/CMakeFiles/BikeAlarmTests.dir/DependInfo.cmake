@@ -18,6 +18,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/tests/bt_alert_test.cpp" "CMakeFiles/BikeAlarmTests.dir/tests/bt_alert_test.cpp.o" "gcc" "CMakeFiles/BikeAlarmTests.dir/tests/bt_alert_test.cpp.o.d"
   "/Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/tests/motion_detect_test.cpp" "CMakeFiles/BikeAlarmTests.dir/tests/motion_detect_test.cpp.o" "gcc" "CMakeFiles/BikeAlarmTests.dir/tests/motion_detect_test.cpp.o.d"
   "/Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/tests/rfid_test.cpp" "CMakeFiles/BikeAlarmTests.dir/tests/rfid_test.cpp.o" "gcc" "CMakeFiles/BikeAlarmTests.dir/tests/rfid_test.cpp.o.d"
+  "/Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/tests/sleep_check_test.cpp" "CMakeFiles/BikeAlarmTests.dir/tests/sleep_check_test.cpp.o" "gcc" "CMakeFiles/BikeAlarmTests.dir/tests/sleep_check_test.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

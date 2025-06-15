@@ -355,6 +355,30 @@ tests/rfid_test.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/BikeAlarmTests.dir/build.make CMakeFiles/BikeAlarmTests.dir/tests/rfid_test.cpp.s
 .PHONY : tests/rfid_test.cpp.s
 
+tests/sleep_check_test.o: tests/sleep_check_test.cpp.o
+.PHONY : tests/sleep_check_test.o
+
+# target to build an object file
+tests/sleep_check_test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BikeAlarmTests.dir/build.make CMakeFiles/BikeAlarmTests.dir/tests/sleep_check_test.cpp.o
+.PHONY : tests/sleep_check_test.cpp.o
+
+tests/sleep_check_test.i: tests/sleep_check_test.cpp.i
+.PHONY : tests/sleep_check_test.i
+
+# target to preprocess a source file
+tests/sleep_check_test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BikeAlarmTests.dir/build.make CMakeFiles/BikeAlarmTests.dir/tests/sleep_check_test.cpp.i
+.PHONY : tests/sleep_check_test.cpp.i
+
+tests/sleep_check_test.s: tests/sleep_check_test.cpp.s
+.PHONY : tests/sleep_check_test.s
+
+# target to generate assembly for a file
+tests/sleep_check_test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BikeAlarmTests.dir/build.make CMakeFiles/BikeAlarmTests.dir/tests/sleep_check_test.cpp.s
+.PHONY : tests/sleep_check_test.cpp.s
+
 tests/test_mocks.o: tests/test_mocks.c.o
 .PHONY : tests/test_mocks.o
 
@@ -416,6 +440,9 @@ help:
 	@echo "... tests/rfid_test.o"
 	@echo "... tests/rfid_test.i"
 	@echo "... tests/rfid_test.s"
+	@echo "... tests/sleep_check_test.o"
+	@echo "... tests/sleep_check_test.i"
+	@echo "... tests/sleep_check_test.s"
 	@echo "... tests/test_mocks.o"
 	@echo "... tests/test_mocks.i"
 	@echo "... tests/test_mocks.s"

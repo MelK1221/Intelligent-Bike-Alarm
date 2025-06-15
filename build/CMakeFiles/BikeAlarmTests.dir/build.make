@@ -128,10 +128,24 @@ CMakeFiles/BikeAlarmTests.dir/tests/rfid_test.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/BikeAlarmTests.dir/tests/rfid_test.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/tests/rfid_test.cpp -o CMakeFiles/BikeAlarmTests.dir/tests/rfid_test.cpp.s
 
+CMakeFiles/BikeAlarmTests.dir/tests/sleep_check_test.cpp.o: CMakeFiles/BikeAlarmTests.dir/flags.make
+CMakeFiles/BikeAlarmTests.dir/tests/sleep_check_test.cpp.o: /Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/tests/sleep_check_test.cpp
+CMakeFiles/BikeAlarmTests.dir/tests/sleep_check_test.cpp.o: CMakeFiles/BikeAlarmTests.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/BikeAlarmTests.dir/tests/sleep_check_test.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/BikeAlarmTests.dir/tests/sleep_check_test.cpp.o -MF CMakeFiles/BikeAlarmTests.dir/tests/sleep_check_test.cpp.o.d -o CMakeFiles/BikeAlarmTests.dir/tests/sleep_check_test.cpp.o -c /Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/tests/sleep_check_test.cpp
+
+CMakeFiles/BikeAlarmTests.dir/tests/sleep_check_test.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/BikeAlarmTests.dir/tests/sleep_check_test.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/tests/sleep_check_test.cpp > CMakeFiles/BikeAlarmTests.dir/tests/sleep_check_test.cpp.i
+
+CMakeFiles/BikeAlarmTests.dir/tests/sleep_check_test.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/BikeAlarmTests.dir/tests/sleep_check_test.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/tests/sleep_check_test.cpp -o CMakeFiles/BikeAlarmTests.dir/tests/sleep_check_test.cpp.s
+
 CMakeFiles/BikeAlarmTests.dir/tasks/activate_buzzer.c.o: CMakeFiles/BikeAlarmTests.dir/flags.make
 CMakeFiles/BikeAlarmTests.dir/tasks/activate_buzzer.c.o: /Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/tasks/activate_buzzer.c
 CMakeFiles/BikeAlarmTests.dir/tasks/activate_buzzer.c.o: CMakeFiles/BikeAlarmTests.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/BikeAlarmTests.dir/tasks/activate_buzzer.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/BikeAlarmTests.dir/tasks/activate_buzzer.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/BikeAlarmTests.dir/tasks/activate_buzzer.c.o -MF CMakeFiles/BikeAlarmTests.dir/tasks/activate_buzzer.c.o.d -o CMakeFiles/BikeAlarmTests.dir/tasks/activate_buzzer.c.o -c /Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/tasks/activate_buzzer.c
 
 CMakeFiles/BikeAlarmTests.dir/tasks/activate_buzzer.c.i: cmake_force
@@ -145,7 +159,7 @@ CMakeFiles/BikeAlarmTests.dir/tasks/activate_buzzer.c.s: cmake_force
 CMakeFiles/BikeAlarmTests.dir/tasks/bt_alert.c.o: CMakeFiles/BikeAlarmTests.dir/flags.make
 CMakeFiles/BikeAlarmTests.dir/tasks/bt_alert.c.o: /Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/tasks/bt_alert.c
 CMakeFiles/BikeAlarmTests.dir/tasks/bt_alert.c.o: CMakeFiles/BikeAlarmTests.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/BikeAlarmTests.dir/tasks/bt_alert.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/BikeAlarmTests.dir/tasks/bt_alert.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/BikeAlarmTests.dir/tasks/bt_alert.c.o -MF CMakeFiles/BikeAlarmTests.dir/tasks/bt_alert.c.o.d -o CMakeFiles/BikeAlarmTests.dir/tasks/bt_alert.c.o -c /Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/tasks/bt_alert.c
 
 CMakeFiles/BikeAlarmTests.dir/tasks/bt_alert.c.i: cmake_force
@@ -159,7 +173,7 @@ CMakeFiles/BikeAlarmTests.dir/tasks/bt_alert.c.s: cmake_force
 CMakeFiles/BikeAlarmTests.dir/tasks/motion_detect.c.o: CMakeFiles/BikeAlarmTests.dir/flags.make
 CMakeFiles/BikeAlarmTests.dir/tasks/motion_detect.c.o: /Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/tasks/motion_detect.c
 CMakeFiles/BikeAlarmTests.dir/tasks/motion_detect.c.o: CMakeFiles/BikeAlarmTests.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/BikeAlarmTests.dir/tasks/motion_detect.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/BikeAlarmTests.dir/tasks/motion_detect.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/BikeAlarmTests.dir/tasks/motion_detect.c.o -MF CMakeFiles/BikeAlarmTests.dir/tasks/motion_detect.c.o.d -o CMakeFiles/BikeAlarmTests.dir/tasks/motion_detect.c.o -c /Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/tasks/motion_detect.c
 
 CMakeFiles/BikeAlarmTests.dir/tasks/motion_detect.c.i: cmake_force
@@ -173,7 +187,7 @@ CMakeFiles/BikeAlarmTests.dir/tasks/motion_detect.c.s: cmake_force
 CMakeFiles/BikeAlarmTests.dir/tasks/rfid.c.o: CMakeFiles/BikeAlarmTests.dir/flags.make
 CMakeFiles/BikeAlarmTests.dir/tasks/rfid.c.o: /Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/tasks/rfid.c
 CMakeFiles/BikeAlarmTests.dir/tasks/rfid.c.o: CMakeFiles/BikeAlarmTests.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/BikeAlarmTests.dir/tasks/rfid.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object CMakeFiles/BikeAlarmTests.dir/tasks/rfid.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/BikeAlarmTests.dir/tasks/rfid.c.o -MF CMakeFiles/BikeAlarmTests.dir/tasks/rfid.c.o.d -o CMakeFiles/BikeAlarmTests.dir/tasks/rfid.c.o -c /Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/tasks/rfid.c
 
 CMakeFiles/BikeAlarmTests.dir/tasks/rfid.c.i: cmake_force
@@ -187,7 +201,7 @@ CMakeFiles/BikeAlarmTests.dir/tasks/rfid.c.s: cmake_force
 CMakeFiles/BikeAlarmTests.dir/tasks/sleep_check.c.o: CMakeFiles/BikeAlarmTests.dir/flags.make
 CMakeFiles/BikeAlarmTests.dir/tasks/sleep_check.c.o: /Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/tasks/sleep_check.c
 CMakeFiles/BikeAlarmTests.dir/tasks/sleep_check.c.o: CMakeFiles/BikeAlarmTests.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object CMakeFiles/BikeAlarmTests.dir/tasks/sleep_check.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building C object CMakeFiles/BikeAlarmTests.dir/tasks/sleep_check.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/BikeAlarmTests.dir/tasks/sleep_check.c.o -MF CMakeFiles/BikeAlarmTests.dir/tasks/sleep_check.c.o.d -o CMakeFiles/BikeAlarmTests.dir/tasks/sleep_check.c.o -c /Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/tasks/sleep_check.c
 
 CMakeFiles/BikeAlarmTests.dir/tasks/sleep_check.c.i: cmake_force
@@ -201,7 +215,7 @@ CMakeFiles/BikeAlarmTests.dir/tasks/sleep_check.c.s: cmake_force
 CMakeFiles/BikeAlarmTests.dir/tests/test_mocks.c.o: CMakeFiles/BikeAlarmTests.dir/flags.make
 CMakeFiles/BikeAlarmTests.dir/tests/test_mocks.c.o: /Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/tests/test_mocks.c
 CMakeFiles/BikeAlarmTests.dir/tests/test_mocks.c.o: CMakeFiles/BikeAlarmTests.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building C object CMakeFiles/BikeAlarmTests.dir/tests/test_mocks.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building C object CMakeFiles/BikeAlarmTests.dir/tests/test_mocks.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/BikeAlarmTests.dir/tests/test_mocks.c.o -MF CMakeFiles/BikeAlarmTests.dir/tests/test_mocks.c.o.d -o CMakeFiles/BikeAlarmTests.dir/tests/test_mocks.c.o -c /Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/tests/test_mocks.c
 
 CMakeFiles/BikeAlarmTests.dir/tests/test_mocks.c.i: cmake_force
@@ -218,6 +232,7 @@ BikeAlarmTests_OBJECTS = \
 "CMakeFiles/BikeAlarmTests.dir/tests/bt_alert_test.cpp.o" \
 "CMakeFiles/BikeAlarmTests.dir/tests/motion_detect_test.cpp.o" \
 "CMakeFiles/BikeAlarmTests.dir/tests/rfid_test.cpp.o" \
+"CMakeFiles/BikeAlarmTests.dir/tests/sleep_check_test.cpp.o" \
 "CMakeFiles/BikeAlarmTests.dir/tasks/activate_buzzer.c.o" \
 "CMakeFiles/BikeAlarmTests.dir/tasks/bt_alert.c.o" \
 "CMakeFiles/BikeAlarmTests.dir/tasks/motion_detect.c.o" \
@@ -232,6 +247,7 @@ BikeAlarmTests: CMakeFiles/BikeAlarmTests.dir/tests/activate_buzzer_test.cpp.o
 BikeAlarmTests: CMakeFiles/BikeAlarmTests.dir/tests/bt_alert_test.cpp.o
 BikeAlarmTests: CMakeFiles/BikeAlarmTests.dir/tests/motion_detect_test.cpp.o
 BikeAlarmTests: CMakeFiles/BikeAlarmTests.dir/tests/rfid_test.cpp.o
+BikeAlarmTests: CMakeFiles/BikeAlarmTests.dir/tests/sleep_check_test.cpp.o
 BikeAlarmTests: CMakeFiles/BikeAlarmTests.dir/tasks/activate_buzzer.c.o
 BikeAlarmTests: CMakeFiles/BikeAlarmTests.dir/tasks/bt_alert.c.o
 BikeAlarmTests: CMakeFiles/BikeAlarmTests.dir/tasks/motion_detect.c.o
@@ -243,7 +259,7 @@ BikeAlarmTests: /opt/homebrew/lib/libgtest.a
 BikeAlarmTests: /opt/homebrew/lib/libgtest_main.a
 BikeAlarmTests: /opt/homebrew/lib/libgtest.a
 BikeAlarmTests: CMakeFiles/BikeAlarmTests.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking CXX executable BikeAlarmTests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX executable BikeAlarmTests"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/BikeAlarmTests.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
