@@ -1,46 +1,55 @@
+/* Buzzer driver
+* Sets buzzer digital pin (D3) as an output
+* Methods for turning buzzer on/off
+* Buzzer tone sequence method for arm/disarm
+*/
+
 #include "buzzer.h"
-
-#include <avr/io.h>
-
-#include "rtos.h"
 
 #define BUZZER_DDR  DDRD
 #define BUZZER_PORT PORTD
 #define BUZZER_PIN  PD3
 
+// Initialize buzzer as output on D3 set to off
 void init_buzz(void) {
     BUZZER_DDR |= (1 << BUZZER_PIN);
     BUZZER_PORT &= ~(1 << BUZZER_PIN);
     DEBUG_PRINT("Buzzer Initialized\n");
 }
 
+// Turns buzzer on
 void buzz_on(void) {
     BUZZER_PORT |= (1 << BUZZER_PIN);
 }
 
+// Turns buzzer off
 void buzz_off(void) {
     BUZZER_PORT &= ~(1 << BUZZER_PIN);
 }
 
+// Tone sequence method to play when arming/disarming alarm
 void buzz_tone_seq(buzzer_sequence_t sequence) {
-    BUZZER_DDR |= (1 << BUZZER_PIN);  // Set buzzer pin as output
+    //BUZZER_DDR |= (1 << BUZZER_PIN);
 
     switch (sequence) {
+        // Three beeps to arm
         case ARMED_BUZZ:
-            // Example: 3 short beeps
             for (int i = 0; i < 3; i++) {
-                BUZZER_PORT |= (1 << BUZZER_PIN);   // buzzer ON
+                buzz_on();
+                //BUZZER_PORT |= (1 << BUZZER_PIN);
                 rtos_delay_ms(100);
-                BUZZER_PORT &= ~(1 << BUZZER_PIN);  // buzzer OFF
+                buzz_off();
+               // BUZZER_PORT &= ~(1 << BUZZER_PIN); 
                 rtos_delay_ms(100);
             }
             break;
-
+        // One long beep to disarm
         case DISARMED_BUZZ:
-            // Example: 1 long beep
-            BUZZER_PORT |= (1 << BUZZER_PIN);       // buzzer ON
+            buzz_on();
+            //BUZZER_PORT |= (1 << BUZZER_PIN);
             rtos_delay_ms(500);
-            BUZZER_PORT &= ~(1 << BUZZER_PIN);      // buzzer OFF
+            buzz_off();
+            //BUZZER_PORT &= ~(1 << BUZZER_PIN);
             break;
     }
 }

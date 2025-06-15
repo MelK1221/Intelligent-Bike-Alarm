@@ -1,6 +1,10 @@
+// Real-time operating system header file
+
 #ifndef RTOS_H
 #define RTOS_H
 
+#include <avr/interrupt.h>
+#include <avr/wdt.h>
 #include <stdint.h>
 #include <stdio.h>
 

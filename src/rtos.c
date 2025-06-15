@@ -1,7 +1,6 @@
+// Functions for establishing and controlling real-time operating system
+
 #include "rtos.h"
-#include <stdio.h>
-#include <avr/interrupt.h>
-#include <avr/wdt.h>
 
 static AddedTask task_list[MAX_TASKS];
 static uint8_t task_count = 0;
@@ -56,9 +55,9 @@ void rtos_scheduler(void) {
                 uint32_t start_time = rtos_get_clock_count();
                 task_list[i].task();
                 uint32_t end_time = rtos_get_clock_count();
-
+                //DEBUG_PRINT("Task %u took %lu ms (period = %u)\r\n", i, (end_time - start_time), task_list[i].period);
                 if ((end_time - start_time) > task_list[i].period) {
-                    DEBUG_PRINT("Task %u exceeded period: took %lu ms (period = %u)\r\n", i, (end_time - start_time), task_list[i].period);
+                    //DEBUG_PRINT("Task %u exceeded period: took %lu ms (period = %u)\r\n", i, (end_time - start_time), task_list[i].period);
                 }
             }
         }

@@ -1,11 +1,9 @@
-#include "mfrc522.h"
+/* RFID scanner module (MFRC522) driver
+* Adapted from https://github.com/miguelbalboa/rfid.git
+* Arduino library for MFRC522 module by miguelbalboa
+*/
 
-#include <util/delay.h>
-#include <string.h>
-#include <avr/io.h>
-#include <stdio.h>
-#include "buzzer.h"
-#include "rtos.h"
+#include "mfrc522.h"
 
 // Adjust these to your wiring
 #define SPI_DDR  DDRB
@@ -199,15 +197,13 @@ static uint8_t MFRC522_RequestA(MFRC522 *dev, uint8_t *bufferATQA, uint8_t *buff
     uint8_t command = PICC_CMD_REQA;
     uint8_t validBits = 7;
     *bufferSize = 2;
-    uint8_t temp2 = MFRC522_TransceiveData(dev, &command, 1, bufferATQA, bufferSize, &validBits, 0);
-    return temp2;
+    return (MFRC522_TransceiveData(dev, &command, 1, bufferATQA, bufferSize, &validBits, 0));
 }
 
 bool MFRC522_PICC_IsNewCardPresent(MFRC522 *dev) {
     uint8_t bufferATQA[2], bufferSize = 2;
-    uint8_t temp3 = MFRC522_RequestA(dev, bufferATQA, &bufferSize);
     //DEBUG_PRINT("MFRC522_RequestA status = %u\n", temp3);
-    return (temp3 == STATUS_OK);
+    return (MFRC522_RequestA(dev, bufferATQA, &bufferSize) == STATUS_OK);
 }
 
 bool MFRC522_PICC_ReadCardSerial(MFRC522 *dev, MFRC522_Uid *uid) {

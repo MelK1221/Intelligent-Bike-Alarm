@@ -1,7 +1,11 @@
+// Controller state header file
+
 #ifndef CONTROLLER_STATE_H
 #define CONTROLLER_STATE_H
 
 #include <stdbool.h>
+
+#include "rtos.h"
 
 void set_alarm_armed(bool state);
 void toggle_alarm_armed(void);

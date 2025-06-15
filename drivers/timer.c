@@ -1,12 +1,8 @@
+// Timer driver initializes clock timer for RTOS and ISR to tick clock
+
 #include "timer.h"
 
-#include <avr/io.h>
-#include <avr/interrupt.h>
-#include <stdio.h>
-#include <stdint.h>
-
-#include "rtos.h"
-
+// Initialize 1ms timer for 16Mhz system clock
 void init_timer1(void) {
     cli();
     
@@ -22,10 +18,12 @@ void init_timer1(void) {
     sei();
 }
 
+// Interrupt service routine ticks RTOS clock every 1 ms
 ISR(TIMER1_COMPA_vect) {
     rtos_clock();
 }
 
+// Prints amount of time system has been powered on
 void print_timestamp(void) {
     uint32_t ms = rtos_get_clock_count();
 

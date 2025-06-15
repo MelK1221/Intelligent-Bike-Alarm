@@ -1,7 +1,12 @@
+// Active buzzer driver header file
+
 #ifndef BUZZER_H
 #define BUZZER_H
 
 #include <stdint.h>
+#include <avr/io.h>
+
+#include "rtos.h"
 
 typedef enum {
     ARMED_BUZZ,

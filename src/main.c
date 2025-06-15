@@ -1,38 +1,4 @@
-#include <avr/io.h>
-#include <util/delay.h>
-#include "uart.h"
-#include "mfrc522.h"
-#include "mfrc522_helper.h"
-#include "rtos.h"
-
-// int main(void) {
-//     uart_init(9600);
-//     init_rfid();  // Or whatever your RFID init function is called
-
-//     DEBUG_PRINT("RFID test started\n");
-
-//     while (1) {
-//         rfid_tag_t tag = mfrc522_get_tag();
-
-//         // Print UID if tag detected
-//         int tag_present = 0;
-//         for (int i = 0; i < UID_LENGTH; ++i) {
-//             if (tag.uid[i] != 0) {
-//                 tag_present = 1;
-//                 break;
-//             }
-//         }
-
-//         if (tag_present) {
-//             DEBUG_PRINT("Tag UID: %02X %02X %02X %02X \n",
-//                         tag.uid[0], tag.uid[1], tag.uid[2], tag.uid[3]);
-//         } else {
-//             DEBUG_PRINT("No tag present\n");
-//         }
-
-//         _delay_ms(500); // Poll every 0.5 seconds
-//     }
-// }
+// Main routine initializes RTOS and all modules, adds tasks to scheduler, and runs scheduler in continuous loop
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -51,33 +17,38 @@
 #include "uart.h"
 #include "rtos.h"
 
-#define LED_PIN PB5
+
 
 int main(void) {
-    DDRB |= (1 << LED_PIN);
-    PORTB &= ~(1 << LED_PIN);
+    // Set LED pin as output and turn off
 
+
+    // Initialize system timer and comms
     init_timer1();
-
     uart_init(9600);
 
+    // Initialize real time operating system
     rtos_init();
 
-    init_sleep();
+    // Initialize external alarm modules and Arduino sleep mode
     init_buzz();
     init_rfid();
     init_mpu6050_w_interrupt();
+    init_sleep();
 
+    // Enable interrupts
     sei();
 
+    // Add tasks to scheduler
     rtos_add_task(detect_motion, 100, 0);
-    rtos_add_task(check_rfid, 700, 35);
-    rtos_add_task(buzzer_alert, 50, 10);
-    rtos_add_task(send_bt_alert, 100, 50);
-    rtos_add_task(check_sleep, 100, 100);
+    rtos_add_task(buzzer_alert, 50, 25);
+    rtos_add_task(send_bt_alert, 400, 230);
+    rtos_add_task(check_rfid, 700, 375);
+    rtos_add_task(check_sleep, 1000, 495);
 
 
     while (1) {
+        // Run round-robin scheduler
         rtos_scheduler();
     }
 }

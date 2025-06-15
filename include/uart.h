@@ -1,3 +1,8 @@
+/* UART interface driver header file
+* Sourced from https://github.com/Sovichea/avr-uart-library.git
+* UART driver for AVR library by Joerg Wunsch, posted by Tep Sovichea
+*/
+
 /*
 * ----------------------------------------------------------------------------
 * "THE BEER-WARE LICENSE" (Revision 42):

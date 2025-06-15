@@ -1,3 +1,8 @@
+/* Accelerometer module (MPU6050) driver header file
+* Adapted from https://github.com/KadePerrotti/MPU6050-Driver.git
+* Platform independent MPU6050 Driver library by Kade Perrotti
+*/
+
 /*
  * MPU6050.h
  *
@@ -15,6 +20,11 @@ extern "C" {
 #endif
 
 #include <stdint.h>
+#include <stdio.h>
+//#include <math.h>
+
+#include "reg_options.h"
+#include "rtos.h"
 
 
 #define SIZE_1_BYTE (1)
