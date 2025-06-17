@@ -8,16 +8,10 @@ University of Michigan - Dearborn
 
 This is the code base for an intelligent bike alarm system developed as a final project for an embedded systems course. The bike alarm will have the following functions:
 
-* Beep_Audio: Triggers audible sound from buzzer
-* BT_Alert: Sends bluetooth alert to smartphone when alarm triggered
-* Motion_Detect: Polls the accelerometer/gyroscope (MPU6050) to detect motion of bike
-* RFID: Arm/disarm system when RFID scan interrupt detected
+* motion_detect: sets alarm triggered when armed and motion detected
+* activate_buzzer: Triggers audible sound from buzzer
+* bt_alert: Sends bluetooth alert to smartphone when alarm triggered
+* rfid: Arm/disarm system when RFID scan detected
+* sleep_check: checks if system should go into sleep mode
 
-In addition, the following drivers are required to utilize modules added to the microcontroller:
-* Buzzer: Play audio tones from Piezo buzzer
-* HM10: Send bluetooth alert to smartphone
-* MFRC522: Detect and read RFID card
-* MPU6050: Read motion data
-* Timer: Interrupt timer for task scheduling
-
-There is also a sleep function that puts the system in power-saving mode when no other tasks are scheduled.
+This system is implemented in bare-metal C with a custom polled loop RTOS and interrupt servicing for motion detected by the MPU6050 motion sensor module. The MFRC522 RFID module is used for RFID reading and an HM-10 Bluetooth Low Power module is used to send an alert to a smartphone when the alarm is triggered. An active buzzer is used to create an auditory beep for the alarm.
