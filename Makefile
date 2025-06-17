@@ -24,8 +24,8 @@ OBJ_EXT = o
 
 # Compiler flags
 CFLAGS = -Wall -Os -mmcu=$(MCU) -DF_CPU=$(F_CPU)
-CFLAGS += $(addprefix -I,$(INC_DIRS))  # Include header directories
-CFLAGS += -DDEBUG_RTOS
+CFLAGS += $(addprefix -I,$(INC_DIRS))
+# CFLAGS += -DDEBUG_RTOS
 LDFLAGS = -Wl,-u,vfprintf -lprintf_flt -lm
 
 # Find all source files

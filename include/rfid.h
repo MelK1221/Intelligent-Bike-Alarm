@@ -10,7 +10,10 @@
 #include "uart.h"
 #include "rtos.h"
 #include "sleep_check.h"
-#include <avr/wdt.h>
+
+#ifdef UNIT_TEST
+extern uint32_t last_scan_time;
+#endif
 
 void check_rfid(void);
 

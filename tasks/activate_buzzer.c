@@ -2,10 +2,17 @@
 
 #include "activate_buzzer.h"
 
-void buzzer_alert(void) {
-    static bool buzzer_on = false; // Track buzzer status for intermitent beeping
-    static uint32_t last_switch_time = 0; // Track length of buzz on/off
+// For unit testing only
+#ifdef UNIT_TEST
+#include <stdio.h>
+extern int buzz_on_calls;
+extern int buzz_off_calls;
+#endif
 
+static bool buzzer_on = false; // Track buzzer status for intermitent beeping
+static uint32_t last_switch_time = 0; // Track length of buzz on/off
+
+void buzzer_alert(void) {
     // Only sound alarm if alarm_triggered is true
     if (is_alarm_triggered()) {
         if (!buzzer_on && last_switch_time == 0) {

@@ -2,8 +2,9 @@
 
 #include "bt_alert.h"
 
+static bool already_reported = false; // Track if alert has already been sent
+
 void send_bt_alert(void) {
-    static bool already_reported = false; // Track if alert has already been sent
 
     // If alarm is triggered and message has not yet been sent, send ALERT
     if (is_alarm_triggered() && !already_reported) {

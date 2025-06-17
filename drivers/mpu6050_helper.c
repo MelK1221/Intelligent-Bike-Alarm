@@ -26,8 +26,7 @@ int mpu6050_write_reg(uint8_t reg, uint8_t data) {
 
 // Motion detection interrupt service routine
 ISR(INT0_vect) {
-    //PORTB ^= (1 << PB5); // Toggle LED
-   // DEBUG_PRINT("INT0: Motion\n");
+    DEBUG_PRINT("INT0: Motion\n");
     set_motion_detected(true);
 }
 
@@ -35,9 +34,9 @@ ISR(INT0_vect) {
 void setup_motion_interrupt(void) {
     cli();  // Disable interrupts during config
 
-    // Configure INT0 (PD2, Arduino pin 2) for rising edge trigger
-    EICRA |= (1 << ISC01) | (1 << ISC00);  // ISC01=1, ISC00=1 -> Rising edge
-    EIMSK |= (1 << INT0);                  // Enable external interrupt INT0
+    // Configure INT0 (PD2, Arduino pin 2)
+    EICRA |= (1 << ISC01) | (1 << ISC00);
+    EIMSK |= (1 << INT0);                
 
     sei();  // Re-enable global interrupts
 }

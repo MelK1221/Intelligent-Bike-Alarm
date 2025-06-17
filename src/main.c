@@ -24,6 +24,7 @@ int main(void) {
 
 
     // Initialize system timer and comms
+    micros_init();
     init_timer1();
     uart_init(9600);
 

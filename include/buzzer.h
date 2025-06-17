@@ -4,7 +4,10 @@
 #define BUZZER_H
 
 #include <stdint.h>
+
+#ifdef __AVR__
 #include <avr/io.h>
+#endif
 
 #include "rtos.h"
 

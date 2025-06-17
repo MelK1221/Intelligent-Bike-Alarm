@@ -20,7 +20,6 @@ static const rfid_tag_t authorized_tags[] = {
 // MFRC522 driver init routine wrapper
 void init_rfid(void) {
     MFRC522_Init(&rfid, rfid.chipSelectPin, rfid.resetPowerDownPin);
-    //uint8_t version = MFRC522_ReadRegister(&rfid, 0x37); // VersionReg
     DEBUG_PRINT("MFRC522 Initialized\n");
 }
 
@@ -29,23 +28,21 @@ rfid_tag_t mfrc522_get_tag(void) {
     rfid_tag_t tag = {0};
     MFRC522_Uid uid = {0};
     bool temp1 = MFRC522_PICC_IsNewCardPresent(&rfid);
-    //DEBUG_PRINT("Card Present = %d\n", temp1);
     if (temp1) {
         if (MFRC522_PICC_ReadCardSerial(&rfid, &uid)) {
             memcpy(tag.uid, uid.uidByte, UID_LENGTH);
-            //DEBUG_PRINT("RFID UID: %02X %02X %02X %02X\n", tag.uid[0], tag.uid[1], tag.uid[2], tag.uid[3]);
+            DEBUG_PRINT("RFID UID: %02X %02X %02X %02X\n", tag.uid[0], tag.uid[1], tag.uid[2], tag.uid[3]);
         } else {
             //
         }
     } else {
-        //DEBUG_PRINT("RFID: No tag present.\n");
+        DEBUG_PRINT("RFID: No tag present.\n");
     }
     return tag;
 }
 
 // Confirm if presented tag has an authorized UID
 bool is_authorized_tag(const rfid_tag_t* tag) {
-    //DEBUG_PRINT("RFID UID: %02X %02X %02X %02X\n", tag->uid[0], tag->uid[1], tag->uid[2], tag->uid[3]);
     for (int i = 0; i < NUM_AUTH_TAGS; ++i) {
         if (memcmp(tag->uid, authorized_tags[i].uid, UID_LENGTH) == 0) {
             return true;

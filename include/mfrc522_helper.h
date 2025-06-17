@@ -5,7 +5,10 @@
 
 #include "mfrc522.h"
 
+#ifdef __AVR__
 #include <avr/io.h>
+#endif
+
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>

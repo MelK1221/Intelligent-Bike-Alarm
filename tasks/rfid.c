@@ -5,8 +5,15 @@
 #define RFID_CS_PIN  PB2
 #define RFID_RST_PIN PB1
 
+// For unit testing
+#ifdef UNIT_TEST
+uint32_t last_scan_time = 0;
+#else
+static uint32_t last_scan_time = 0;
+#endif
+
 void check_rfid(void) {
-    static uint32_t last_scan_time = 0;
+    //static uint32_t last_scan_time = 0;
     uint32_t now = rtos_get_clock_count();
 
     // Scan once per second
@@ -34,6 +41,7 @@ void check_rfid(void) {
     // If authorized tag presented, change alarm state
     if (is_authorized_tag(&tag)) {
         
+        // Switch alarm armed flag state if authorized tag presented
         toggle_alarm_armed();
 
         // If alarm not triggering, play arm/disarm beep seq for user notification
@@ -43,11 +51,11 @@ void check_rfid(void) {
                 armed_wake_time = rtos_get_clock_count();
             } else {
                 buzz_tone_seq(DISARMED_BUZZ);
-                set_alarm_triggered(false);
             }
 
-            // RFID has just been scanned, no longer waiting
+            // RFID has just been scanned, no longer waiting or triggering
             set_wait_rfid(false);
+            set_alarm_triggered(false);
         }
 
     } else {

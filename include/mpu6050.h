@@ -21,7 +21,6 @@ extern "C" {
 
 #include <stdint.h>
 #include <stdio.h>
-//#include <math.h>
 
 #include "reg_options.h"
 #include "rtos.h"
@@ -32,9 +31,6 @@ extern "C" {
 #define MS_TO_S(ms) (ms / 1000.0f)
 #define BYTES_PER_MEASURE (2) //gyro, accel, temp measurements are 2 bytes each
 #define FIFO_SIZE (1024) //size of fifo in bytes
-
-//if the change from factory trim is greater than abs(percent), the axis has failed
-//#define SELF_TEST_FAIL_PERCENT (14.0f)
 
 //macro to turn raw data into a gyro or accel reading
 #define TRANSFORM(upper, lower, scaler) \
@@ -133,51 +129,6 @@ float read_gyro_axis(uint8_t address, uint16_t scaler, MPU6050_REG_READ_TYPE rea
  * @return the raw axis measurement 
  */
 int16_t read_raw_axis(uint8_t address, MPU6050_REG_READ_TYPE readReg);
-
-
-/**
- * @brief The factory test functions measure how far off the trim for each
- * axis is from the factory values. If an axis > abs(passPercent), then
- * that axis failed the test. See the self test registers description in the 
- * MPU6050 register map for more information.
- */
-
-
-/**
- * @brief Runs a self test on the gyro. Steps:
- * 1. Set gyro's full scale range to 250dps
- * 2. Save gyro's output with self test disabled (TD)
- * 3. Enable self test register
- * 4. Save gyro's output with self test enabled (TE)
- * 5. SelfTestResponse (STR) = TE - TD
- * 6. Obtain Factory Trim values (FT)
- * 7. Calculate the change from factory trim for each axis
- * 8. Store the change from factory trim in the FACTORY_TEST_RESULTS struct
- * @param readReg function that performs register reads on the MPU6050
- * @param writeReg function that performs register writes on the MPU6050
- * @param delay function that can block program execution
- * @return The change from factory trim expressed as a percentage for each axis
- */
-//FACTORY_TEST_RESULTS gyro_self_test(MPU6050_REG_READ_TYPE readReg, MPU6050_REG_WRITE_TYPE writeReg, DELAY_MS_TYPE delay);
-
-
-/**
- * Runs a self test on the accelerometer. Steps:
- * 1. Set accelerometer's full scale range to 8g
- * 2. Save accel output with self test disabled (TD)
- * 3. Enable self test registers
- * 4. Save accel output with self test enabled (TE)
- * 5. SelfTestResponse (STR) = TE - TD
- * 6. Obtain Factory Trim values (FT)
- * 7. Calculate the change from factory trim for each axis
- * 8. Store the change from factory trim in the FACTORY_TEST_RESULTS struct
- * @param readReg function that performs register reads on the MPU6050
- * @param writeReg function that performs register writes on the MPU6050
- * @param delay function that can block program execution
- * @return The change from factory trim expressed as a percentage for each axis
- */
-//FACTORY_TEST_RESULTS accel_self_test(MPU6050_REG_READ_TYPE readReg, MPU6050_REG_WRITE_TYPE writeReg, DELAY_MS_TYPE delay);
-
 
 /**
  * @brief Helper function to read the number of bytes currently in the fifo

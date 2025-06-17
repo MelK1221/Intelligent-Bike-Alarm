@@ -3,22 +3,29 @@
 #ifndef RTOS_H
 #define RTOS_H
 
+#ifdef __AVR__
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
+#endif
+
 #include <stdint.h>
 #include <stdio.h>
 
-// For debugging
+#include "micros.h"
+
+// Debugging printing Macro
 #ifdef DEBUG_RTOS
 #define DEBUG_PRINT(...) do { printf(__VA_ARGS__); fflush(stdout); } while (0)
 #else
 #define DEBUG_PRINT(...)
 #endif
 
+// Maximum of 8 tasks can be scheuduled
 #define MAX_TASKS 8
 
 typedef void (*Task)(void);
 
+// Each task scheduled with period and offset start time
 typedef struct {
     Task task;
     uint16_t period;
