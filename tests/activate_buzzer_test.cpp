@@ -2,30 +2,9 @@
 
 extern "C" {
 #include "activate_buzzer.h"
+#include "test_mocks.h"
 }
 
-// --- Mocked globals & functions ---
-extern int buzz_on_calls;
-extern int buzz_off_calls;
-
-static bool mock_alarm_triggered = false;
-static uint32_t mock_clock = 0;
-
-extern "C" {
-
-// Mock implementation for is_alarm_triggered
-bool is_alarm_triggered(void) {
-    return mock_alarm_triggered;
-}
-
-// Mock implementation for rtos_get_clock_count
-uint32_t rtos_get_clock_count(void) {
-    return mock_clock;
-}
-
-void reset_buzzer_alert_state(void);
-
-}
 
 // --- GoogleTest test cases ---
 
@@ -60,16 +39,16 @@ TEST(ActivateBuzzerTest, AlarmTriggeredBeepsEverySecond) {
 
     mock_clock = 1001;
     buzzer_alert();
-    EXPECT_EQ(buzz_on_calls, 0); // No beep yet, just initializes timer
+    EXPECT_EQ(buzz_on_calls, 0);
     EXPECT_EQ(buzz_off_calls, 0);
 
     mock_clock = 2002;
     buzzer_alert();
-    EXPECT_EQ(buzz_on_calls, 1); // First beep (on)
+    EXPECT_EQ(buzz_on_calls, 1);
     EXPECT_EQ(buzz_off_calls, 0);
 
     mock_clock = 3003;
     buzzer_alert();
-    EXPECT_EQ(buzz_on_calls, 1); // Still only 1 ON
-    EXPECT_EQ(buzz_off_calls, 1); // First beep (off)
+    EXPECT_EQ(buzz_on_calls, 1); 
+    EXPECT_EQ(buzz_off_calls, 1); 
 }

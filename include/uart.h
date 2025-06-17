@@ -26,7 +26,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+
+#ifdef __AVR__
 #include <avr/io.h>
+#endif
 
 #define ESC          "\033"
 #define RESET        ESC "[0m"

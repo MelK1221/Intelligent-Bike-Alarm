@@ -1,4 +1,0 @@
-/Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/build/CMakeFiles/BikeAlarmTests.dir
-/Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/build/CMakeFiles/test.dir
-/Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/build/CMakeFiles/edit_cache.dir
-/Users/melaniekukura/Documents/UMDearborn_Courses/ECE_554_Embedded_Systems/Final_Project/Intelligent_Bike_Alarm/build/CMakeFiles/rebuild_cache.dir

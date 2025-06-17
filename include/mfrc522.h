@@ -8,10 +8,13 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include <util/delay.h>
 #include <string.h>
-#include <avr/io.h>
 #include <stdio.h>
+
+#ifdef __AVR__
+#include <util/delay.h>
+#include <avr/io.h>
+#endif
 
 #include "rtos.h"
 

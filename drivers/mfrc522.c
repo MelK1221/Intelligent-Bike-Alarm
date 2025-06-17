@@ -202,7 +202,6 @@ static uint8_t MFRC522_RequestA(MFRC522 *dev, uint8_t *bufferATQA, uint8_t *buff
 
 bool MFRC522_PICC_IsNewCardPresent(MFRC522 *dev) {
     uint8_t bufferATQA[2], bufferSize = 2;
-    //DEBUG_PRINT("MFRC522_RequestA status = %u\n", temp3);
     return (MFRC522_RequestA(dev, bufferATQA, &bufferSize) == STATUS_OK);
 }
 

@@ -18,33 +18,38 @@ endif()
 # ====== Unit Tests ======
 enable_testing()
 
+# Find all test files ending with _test.cpp in the tests directory
 file(GLOB TEST_SOURCES "tests/*_test.cpp")
+
+# List any production C files you want to compile into the test binary (for testing static functions, etc.)
 set(TESTABLE_CODE
     # src/controller_state.c
     tasks/activate_buzzer.c
     tasks/bt_alert.c
+    tasks/motion_detect.c
+    tasks/rfid.c
+    tasks/sleep_check.c
     # Add more C files to test as needed
 )
+
+# List all test mocks (now just your unified mocks file)
 set(MOCKS
-    tests/mock_buzzer.c
-    # Add more mocks if needed
+    tests/test_mocks.c
+    # Add more mocks here if needed in the future
 )
 
-# --- GoogleTest via FetchContent ---
-include(FetchContent)
-FetchContent_Declare(
-  googletest
-  URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip
-)
-FetchContent_MakeAvailable(googletest)
+# --- GoogleTest via find_package ---
+find_package(GTest REQUIRED)
 
 if(TEST_SOURCES)
     add_executable(BikeAlarmTests ${TEST_SOURCES} ${TESTABLE_CODE} ${MOCKS})
     target_include_directories(BikeAlarmTests PRIVATE
         ${CMAKE_SOURCE_DIR}/tests
         ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/tasks
     )
+    # This define is critical for exposing last_scan_time and other test hooks!
     target_compile_definitions(BikeAlarmTests PRIVATE UNIT_TEST)
-    target_link_libraries(BikeAlarmTests gtest gtest_main pthread)
+    target_link_libraries(BikeAlarmTests PRIVATE GTest::gtest GTest::gtest_main pthread)
     add_test(NAME BikeAlarmTests COMMAND BikeAlarmTests)
 endif()

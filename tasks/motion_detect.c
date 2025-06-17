@@ -11,7 +11,7 @@ void detect_motion(void) {
         // Only trigger alarm if system is armed and alarm not already triggered
         if (is_alarm_armed() && !is_alarm_triggered()) {
             set_alarm_triggered(true);
-            //DEBUG_PRINT("Alarm triggered due to motion!\n");
+            DEBUG_PRINT("Alarm triggered due to motion!\n");
         }
 
         // Clear the motion flag so we only handle once per event.
